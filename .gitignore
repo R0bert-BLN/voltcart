@@ -1,0 +1,5 @@
+.env
+.env.*
+!.env.example
+factory/runs/
+.DS_Store

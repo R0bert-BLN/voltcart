@@ -1,0 +1,66 @@
+name: voltcart
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: voltcart
+      POSTGRES_USER: voltcart
+      POSTGRES_PASSWORD: voltcart
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./docker/db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U voltcart -d voltcart"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build:
+      context: ./docker/backend
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: voltcart
+      DB_USERNAME: voltcart
+      DB_PASSWORD: voltcart
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./frontend/src/api/generated:/generated
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/up"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  frontend:
+    build:
+      context: ./docker/frontend
+    environment:
+      API_PROXY_TARGET: http://backend:8000
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:5173/"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+
+volumes:
+  db-data:

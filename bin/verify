@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# The one gate: lint, static analysis, type checks and tests, all inside the containers.
+# Exit 0 means the change is acceptable. Usage: ./bin/verify
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+step() { printf '\n\033[1m▶ %s\033[0m\n' "$1"; }
+be() { docker compose exec -T backend "$@"; }
+fe() { docker compose exec -T frontend "$@"; }
+
+step "Containers"
+docker compose up -d --wait --quiet-pull >/dev/null
+
+step "Backend: style (pint)"
+be ./vendor/bin/pint --test
+
+step "Backend: static analysis (phpstan)"
+be ./vendor/bin/phpstan analyse --no-progress --memory-limit=1G
+
+step "Backend: TypeScript types are current"
+be php artisan typescript:transform >/dev/null
+if [ -n "$(git status --porcelain -- frontend/src/api/generated)" ]; then
+  echo "frontend/src/api/generated changed: the DTOs changed. Keep the regenerated file and commit it."
+  git status --short -- frontend/src/api/generated
+fi
+
+step "Backend: tests (pest)"
+be ./vendor/bin/pest --compact
+
+step "Frontend: lint (oxlint)"
+fe pnpm -s lint
+
+step "Frontend: types (tsc)"
+fe pnpm -s typecheck
+
+step "Frontend: tests (vitest)"
+fe pnpm -s test
+
+printf '\n\033[32m✔ verify passed\033[0m\n'
