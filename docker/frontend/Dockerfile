@@ -1,6 +1,5 @@
 FROM node:22-alpine
 
-# The node user is uid 1000, like the host user, so the bind mount stays editable on the host
 RUN apk add --no-cache git \
  && corepack enable \
  && mkdir -p /app && chown node:node /app

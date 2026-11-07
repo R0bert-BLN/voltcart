@@ -11,7 +11,6 @@ RUN apt-get update \
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Run as the host user, so files written in the bind mount stay editable on the host
 RUN groupadd -g "$GID" app 2>/dev/null || true \
  && useradd -m -u "$UID" -g "$GID" -s /bin/bash app \
  && setcap -r /usr/local/bin/frankenphp \
