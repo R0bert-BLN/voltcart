@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Run by pk factory after a failed attempt, once git has restored the files:
+# brings the containers, dependencies and the dev database back in line with the repository.
+set -uo pipefail
+cd "$(dirname "$0")/.."
+docker compose up -d --wait --quiet-pull >/dev/null
+docker compose exec -T backend composer install -q --no-interaction
+docker compose exec -T frontend pnpm install --frozen-lockfile --silent
+docker compose exec -T backend php artisan migrate:fresh --force -q
