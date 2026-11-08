@@ -13,10 +13,25 @@ export async function login(credentials: { email: string; password: string }) {
   return data.user
 }
 
-export async function register(payload: { name: string; email: string; password: string }) {
+export interface RegisterPayload {
+  name: string
+  email: string
+  password: string
+  passwordConfirmation: string
+  terms: boolean
+}
+
+export async function register(payload: RegisterPayload) {
+  // Laravel's `confirmed` rule reads the confirmation from password_confirmation.
   const data = await apiRequest<{ token: string; user: unknown }>('/register', {
     method: 'POST',
-    body: payload,
+    body: {
+      name: payload.name,
+      email: payload.email,
+      password: payload.password,
+      password_confirmation: payload.passwordConfirmation,
+      terms: payload.terms,
+    },
   })
   setToken(data.token)
   return data.user
