@@ -2,7 +2,7 @@ import { cn } from 'cn'
 
 import { Icon, type IconName } from '@/components/ui/icon'
 
-export type BadgeTone = '' | 'success' | 'warning' | 'danger'
+export type BadgeTone = '' | 'info' | 'success' | 'warning' | 'danger'
 
 export interface BadgeProps extends React.ComponentProps<'span'> {
   /** Status tone; omit for the neutral badge. */
@@ -13,6 +13,7 @@ export interface BadgeProps extends React.ComponentProps<'span'> {
 
 const toneClasses = {
   '': 'bg-(--surface-2) text-(--text-muted)',
+  info: 'bg-(--primary-soft) text-(--primary)',
   success: 'bg-(--success-soft) text-(--success)',
   warning: 'bg-(--warning-soft) text-(--warning)',
   danger: 'bg-(--danger-soft) text-(--danger)',

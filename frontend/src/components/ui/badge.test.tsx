@@ -14,6 +14,7 @@ describe('Badge', () => {
   })
 
   it.each([
+    ['info', 'bg-(--primary-soft)'],
     ['success', 'bg-(--success-soft)'],
     ['warning', 'bg-(--warning-soft)'],
     ['danger', 'bg-(--danger-soft)'],
