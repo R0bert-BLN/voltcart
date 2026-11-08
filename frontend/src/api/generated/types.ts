@@ -1,3 +1,18 @@
+export type CartData = {
+lines: CartLineData[],
+subtotalCents: number,
+};
+export type CartLineData = {
+productId: string,
+name: string,
+priceCents: number,
+quantity: number,
+lineTotalCents: number,
+image: string,
+};
+export type CartUpdateData = {
+quantity: number,
+};
 export type CategoryData = {
 id: string,
 name: string,
