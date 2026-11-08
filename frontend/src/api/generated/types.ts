@@ -76,10 +76,37 @@ export type LoginData = {
 email: string,
 password: string,
 };
+export type OrderData = {
+id: string,
+status: string,
+paymentMethod: string,
+subtotalCents: number,
+deliveryCents: number,
+totalCents: number,
+estimatedAt: string | null,
+items: OrderItemData[],
+};
+export type OrderItemData = {
+productId: string,
+name: string,
+unitPriceCents: number,
+quantity: number,
+lineTotalCents: number,
+};
 export type OrderStatus = 'processing' | 'shipped' | 'delivered' | 'cancelled';
 export type PaginatedDataCollection<TKey, TValue> = LengthAwarePaginator<TKey, TValue>;
 export type PingData = {
 ok: boolean,
+};
+export type PlaceOrderData = {
+deliveryMethodId: string,
+paymentMethod: string,
+contactName: string,
+contactPhone: string,
+addressLine1: string,
+postalCode: string,
+city: string,
+country: string,
 };
 export type ProductData = {
 id: string,

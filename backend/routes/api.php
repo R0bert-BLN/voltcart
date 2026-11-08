@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Admin\StockController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CatalogueController;
+use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\WishlistController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,7 @@ Route::middleware(['auth:sanctum', 'client'])->group(function () {
     Route::put('/cart/{product}', [CartController::class, 'update']);
     Route::delete('/cart/{product}', [CartController::class, 'destroy']);
     Route::post('/cart/merge', [CartController::class, 'merge']);
+    Route::post('/checkout', [CheckoutController::class, 'store']);
 
     Route::get('/wishlist', [WishlistController::class, 'index']);
     Route::put('/wishlist/{product}', [WishlistController::class, 'store']);
