@@ -92,11 +92,11 @@ describe('auth screens', () => {
 })
 
 describe('placeholder screens', () => {
-  // The wish list (T44), the cart (T46) and the delivery and payment step
-  // (T47) are built screens; the remaining placeholders are the checkout and
-  // orders screens of the later reports.
+  // The wish list (T44), the cart (T46), the delivery and payment step
+  // (T47) and the order confirmation (T49) are built screens; the remaining
+  // placeholders are the orders screens of the later reports.
   it.each([
-    ['/checkout/confirmation', 'Order confirmed'],
+    ['/orders', 'Order history'],
     ['/orders', 'Order history'],
     ['/orders/o1', 'Order details'],
   ])('%s shows its placeholder with a way back', async (path, title) => {
