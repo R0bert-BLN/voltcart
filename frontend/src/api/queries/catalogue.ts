@@ -133,3 +133,37 @@ export function productSupplier(product: Product): Supplier {
   return suppliers.find((supplier) => supplier.id === product.supplierId)!
 }
 
+/** One row of the overview's Needs attention list: the product with the name
+    of its supplier for the row's subtitle. */
+export interface AttentionRow {
+  product: ProductData
+  supplierName: string
+}
+
+/** The admin overview's numbers and Needs attention rows, as in the mockup's
+    screen: count tiles plus the low-stock products, rarest stock first, their
+    out-of-stock siblings counted for the fourth tile. */
+export function useAdminOverview(): {
+  productsCount: number
+  categoriesCount: number
+  lowStock: AttentionRow[]
+  outOfStockCount: number
+} {
+  return useMemo(() => {
+    const stockOf = (product: Product) => stockStatusOf(product.stock)
+    const lowStock = products
+      .filter((product) => stockOf(product) === 'low_stock')
+      .sort((a, b) => a.stock - b.stock)
+
+    return {
+      productsCount: products.length,
+      categoriesCount: categories.length,
+      lowStock: lowStock.map((product) => ({
+        product: toProductData(product),
+        supplierName: productSupplier(product).name,
+      })),
+      outOfStockCount: products.filter((product) => stockOf(product) === 'out_of_stock').length,
+    }
+  }, [])
+}
+

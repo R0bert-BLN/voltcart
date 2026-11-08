@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { apiRequest, clearToken, getToken, setToken } from '@/api/client'
 import type { UserData } from '@/api/generated/types'
+import { users } from '@/lib/mock-data'
 
 export async function login(credentials: { email: string; password: string }) {
   const data = await apiRequest<{ token: string; user: unknown }>('/login', {
@@ -80,4 +81,12 @@ export function useLogout() {
     mutationFn: logout,
     onSuccess: () => queryClient.setQueryData(['me'], null),
   })
+}
+
+/** The name shown for the signed-in admin (the overview's subtitle): the
+    account from the API when one is signed in, otherwise the admin of the
+    data layer, so the area reads as itself outside a live session too. */
+export function useAdminName(): string {
+  const me = useMe()
+  return me.data?.name ?? users.find((user) => user.role === 'admin')!.name
 }

@@ -110,7 +110,7 @@ describe('auth-login screen', () => {
     await waitFor(() => expect(router.state.location.pathname).toBe('/'))
   })
 
-  it('opens the admin products for an admin sign-in', async () => {
+  it('opens the admin dashboard for an admin sign-in', async () => {
     loginMock.mockResolvedValue(admin)
     const { router } = await renderRoute('/login')
 
@@ -118,7 +118,7 @@ describe('auth-login screen', () => {
     await userEvent.type(passwordField(), 'admin-pass')
     await userEvent.click(screen.getByRole('button', { name: 'Sign in' }))
 
-    await waitFor(() => expect(router.state.location.pathname).toBe('/admin/products'))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/admin'))
   })
 
   it('redirects a client to the next path from the query string', async () => {

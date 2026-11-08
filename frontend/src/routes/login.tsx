@@ -49,8 +49,8 @@ function LoginScreen() {
     try {
       const user = (await login.mutateAsync({ email, password })) as UserData
       // The role comes from the backend account: admins land on the admin
-      // products until the admin dashboard is built, clients on the store.
-      if (user.role === 'admin') await navigate({ to: '/admin/products' })
+      // dashboard (decision 2026-11-02), clients on the store.
+      if (user.role === 'admin') await navigate({ to: '/admin' })
       else if (next !== undefined) await router.history.push(next)
       else await navigate({ to: '/' })
     } catch (submitError) {
