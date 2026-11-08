@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createMemoryHistory, createRouter, RouterProvider } from '@tanstack/react-router'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it } from 'vitest'
 
@@ -33,8 +33,11 @@ describe('store shell', () => {
   it('shows the brand, the catalogue section, the search field and the counters', async () => {
     await renderRoute('/')
 
+    // Scoped to the top bar: the store home now carries an "All products"
+    // link of its own.
+    const topBar = within(screen.getByRole('banner'))
     expect(screen.getByRole('link', { name: 'Voltcart' })).toBeVisible()
-    expect(screen.getByRole('link', { name: 'All products' })).toBeVisible()
+    expect(topBar.getByRole('link', { name: 'All products' })).toBeVisible()
     expect(screen.getByRole('searchbox', { name: 'Search products' })).toBeVisible()
     expect(screen.getByRole('link', { name: 'Wish list' })).toBeVisible()
     expect(screen.getByRole('link', { name: 'Cart' })).toBeVisible()
@@ -90,7 +93,6 @@ describe('auth screens', () => {
 
 describe('placeholder screens', () => {
   it.each([
-    ['/', 'Store home'],
     ['/products', 'Products'],
     ['/products/p1', 'Product details'],
     ['/wishlist', 'Wish list'],
@@ -114,8 +116,8 @@ describe('placeholder screens', () => {
   it('goes back through the history when the placeholder button is used', async () => {
     const { router } = await renderRoute('/')
 
-    await userEvent.click(screen.getByRole('link', { name: 'All products' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/products'))
+    await userEvent.click(screen.getByRole('link', { name: 'Wish list' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/wishlist'))
 
     await userEvent.click(screen.getByRole('button', { name: 'Go back' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/'))
