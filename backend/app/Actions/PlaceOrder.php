@@ -4,7 +4,6 @@ namespace App\Actions;
 
 use App\Data\Checkout\PlaceOrderData;
 use App\Data\Order\OrderData;
-use App\Data\Order\OrderItemData;
 use App\Enums\OrderStatus;
 use App\Models\CartItem;
 use App\Models\DeliveryMethod;
@@ -90,22 +89,7 @@ class PlaceOrder
 
             CartItem::query()->where('user_id', $user->id)->delete();
 
-            return new OrderData(
-                id: $order->id,
-                status: $order->status->value,
-                paymentMethod: $order->payment_method,
-                subtotalCents: $order->subtotal_cents,
-                deliveryCents: $order->delivery_cents,
-                totalCents: $order->total_cents,
-                estimatedAt: $order->estimated_at?->toISOString(),
-                items: $cartItems->map(fn (CartItem $item): OrderItemData => new OrderItemData(
-                    productId: $item->product->id,
-                    name: $item->product->name,
-                    unitPriceCents: $item->product->price_cents,
-                    quantity: $item->quantity,
-                    lineTotalCents: $item->product->price_cents * $item->quantity,
-                ))->values()->all(),
-            );
+            return OrderData::fromModel($order);
         });
     }
 }

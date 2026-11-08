@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { ApiError, apiRequest, getToken } from '@/api/client'
-import type { OrderData, OrderSummaryData, PlaceOrderData } from '@/api/generated/types'
+import type { CartData, OrderData, OrderSummaryData, PlaceOrderData } from '@/api/generated/types'
 
 /** Places one order (mockup MK.orders.place): POST /checkout builds it from
     the cart in the backend, which reduces the stock and empties the cart. */
@@ -53,5 +53,54 @@ export function useOrder(id?: string) {
     // state. Anything else is a real failure.
     throwOnError: (error) =>
       !(error instanceof ApiError && (error.status === 401 || error.status === 404)),
+  })
+}
+
+/** What one buy-again pass added to the cart: the lines that went in and the
+    ones the stock (or a missing product) turned away. */
+export interface BuyAgainResult {
+  added: number
+  skipped: number
+}
+
+/** Buy again (mockup MK.orders.buyAgain): puts every item back at its ordered
+    quantity on top of what the cart already holds. The backend caps each line
+    at the stock, so a line the cart did not grow counts as skipped. */
+export function useBuyAgain() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (order: OrderData): Promise<BuyAgainResult> => {
+      const cart = await apiRequest<CartData>('/cart')
+      const held = new Map(cart.lines.map((line) => [line.productId, line.quantity]))
+
+      let added = 0
+      let skipped = 0
+
+      // One line at a time: every PUT reads and writes the same stored cart.
+      for (const item of order.items) {
+        const before = held.get(item.productId) ?? 0
+        try {
+          const nextCart = await apiRequest<CartData>(`/cart/${item.productId}`, {
+            method: 'PUT',
+            body: { quantity: before + item.quantity },
+          })
+          const now =
+            nextCart.lines.find((line) => line.productId === item.productId)?.quantity ?? 0
+          if (now > before) {
+            added += 1
+          } else {
+            skipped += 1
+          }
+          held.set(item.productId, now)
+          queryClient.setQueryData(['cart'], nextCart)
+        } catch {
+          // A product the catalog lost no longer buys; the others still do.
+          skipped += 1
+        }
+      }
+
+      return { added, skipped }
+    },
   })
 }

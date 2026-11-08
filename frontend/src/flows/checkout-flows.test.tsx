@@ -104,7 +104,16 @@ const stubApi = (initialLines: CartLineData[]) => {
           deliveryCents,
           totalCents: subtotalCents + deliveryCents,
           estimatedAt: '2026-11-12T10:00:00.000Z',
+          createdAt: '2026-11-10T09:00:00.000Z',
           items,
+          contactName: body.contactName,
+          contactPhone: body.contactPhone,
+          addressLine1: body.addressLine1,
+          postalCode: body.postalCode,
+          city: body.city,
+          country: body.country,
+          deliveryMethodName: method_ ? method_.name : 'Chosen at checkout',
+          deliveryMethodDays: method_ ? method_.days : 0,
         }
         // The placed order takes the cart with it.
         cart = { lines: [], subtotalCents: 0 }

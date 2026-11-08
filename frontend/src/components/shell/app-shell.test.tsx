@@ -90,25 +90,3 @@ describe('auth screens', () => {
     expect(screen.getByRole('link', { name: 'Voltcart' })).toBeVisible()
   })
 })
-
-describe('placeholder screens', () => {
-  // The wish list (T44), the cart (T46), the delivery and payment step
-  // (T47), the order confirmation (T49) and the order history (T51) are
-  // built screens; the remaining placeholder is the order details screen.
-  it.each([['/orders/o1', 'Order details']])('%s shows its placeholder with a way back', async (path, title) => {
-    await renderRoute(path)
-
-    expect(screen.getByRole('heading', { level: 1, name: title })).toBeVisible()
-    expect(screen.getByRole('button', { name: 'Go back' })).toBeVisible()
-  })
-
-  it('goes back through the history when the placeholder button is used', async () => {
-    const { router } = await renderRoute('/')
-    // A placeholder screen keeps its way back through the history.
-    await router.navigate({ to: '/orders/$orderId', params: { orderId: 'o1' } })
-    await waitFor(() => expect(router.state.location.pathname).toBe('/orders/o1'))
-
-    await userEvent.click(screen.getByRole('button', { name: 'Go back' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/'))
-  })
-})

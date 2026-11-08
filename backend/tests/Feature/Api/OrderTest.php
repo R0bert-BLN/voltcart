@@ -93,7 +93,14 @@ it('shows an order with its items', function () {
         ->assertJsonCount(1, 'items')
         ->assertJsonPath('items.0.name', 'USB-C charger')
         ->assertJsonPath('items.0.quantity', 2)
-        ->assertJsonPath('items.0.lineTotalCents', 2000);
+        ->assertJsonPath('items.0.lineTotalCents', 2000)
+        ->assertJsonPath('contactName', 'Maya Dupont')
+        ->assertJsonPath('contactPhone', '+33 6 12 34 56 78')
+        ->assertJsonPath('addressLine1', '12 rue des Lilas')
+        ->assertJsonPath('postalCode', '75011')
+        ->assertJsonPath('city', 'Paris')
+        ->assertJsonPath('country', 'France')
+        ->assertJsonPath('deliveryMethodDays', $order->deliveryMethod->days);
 });
 
 it('hides another user’s order', function () {
