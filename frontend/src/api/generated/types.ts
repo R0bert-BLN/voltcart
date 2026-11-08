@@ -38,6 +38,7 @@ to: number | null,
 },
 };
 export type LengthAwarePaginatorInterface<TKey, TValue> = LengthAwarePaginator<TKey, TValue>;
+export type OrderStatus = 'processing' | 'shipped' | 'delivered' | 'cancelled';
 export type PaginatedDataCollection<TKey, TValue> = LengthAwarePaginator<TKey, TValue>;
 export type PingData = {
 ok: boolean,
