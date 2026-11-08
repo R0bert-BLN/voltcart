@@ -1,6 +1,7 @@
 import type { ProductData } from '@/api/generated/types'
 import type { IconName } from '@/components/ui/icon'
-import { categories, deliveryMethods, products, type Category, type DeliveryMethod, type Product } from '@/lib/mock-data'
+import { useMemo } from 'react'
+import { categories, deliveryMethods, products, suppliers, type Category, type DeliveryMethod, type Product, type Supplier } from '@/lib/mock-data'
 
 /** The data layer keeps kebab-case lucide names; the Icon types them. */
 export const asIconName = (name: string): IconName => name as IconName
@@ -50,3 +51,74 @@ export function usePopularProducts(limit = 8): ProductData[] {
 export function useDeliveryMethods(): DeliveryMethod[] {
   return deliveryMethods
 }
+
+/** The five supplier companies, for the supplier filter of the list. */
+export function useSuppliers(): Supplier[] {
+  return suppliers
+}
+
+/** Sort orders of the product list, as in the mockup's sorters. */
+export type CatalogueSort = 'recommended' | 'price-asc' | 'price-desc' | 'name'
+
+/** Filters of the product list, straight from the screen's search params. */
+export interface CatalogueFilters {
+  q?: string
+  /** Comma-separated category, supplier and delivery-method ids. */
+  category?: string
+  supplier?: string
+  delivery?: string
+  min?: string
+  max?: string
+  stockOnly?: boolean
+  sort?: CatalogueSort
+}
+
+const SORTERS: Record<CatalogueSort, (a: Product, b: Product) => number> = {
+  recommended: (a, b) =>
+    (b.stock > 0 ? 1 : 0) - (a.stock > 0 ? 1 : 0) ||
+    (b.popular ? 1 : 0) - (a.popular ? 1 : 0) ||
+    a.name.localeCompare(b.name),
+  'price-asc': (a, b) => a.price - b.price,
+  'price-desc': (a, b) => b.price - a.price,
+  name: (a, b) => a.name.localeCompare(b.name),
+}
+
+/** The comma-separated ids of one search parameter. */
+const csvIds = (value?: string): string[] => (value ?? '').split(',').filter(Boolean)
+
+/** The product list for one set of filters, sorted and grid-ready. */
+export function useFilteredProducts(filters: CatalogueFilters): ProductData[] {
+  const { q, category, supplier, delivery, min, max, stockOnly = false, sort = 'recommended' } = filters
+
+  return useMemo(() => {
+    const query = (q ?? '').trim().toLowerCase()
+    const minPrice = min ? Number(min) : null
+    const maxPrice = max ? Number(max) : null
+    const found = products.filter(
+      (product) =>
+        (!query || `${product.name} ${product.description}`.toLowerCase().includes(query)) &&
+        (!category || csvIds(category).includes(product.categoryId)) &&
+        (!supplier || csvIds(supplier).includes(product.supplierId)) &&
+        (!delivery || csvIds(delivery).some((id) => product.deliveryIds.includes(id))) &&
+        (minPrice === null || Number.isNaN(minPrice) || product.price >= minPrice) &&
+        (maxPrice === null || Number.isNaN(maxPrice) || product.price <= maxPrice) &&
+        (!stockOnly || product.stock > 0),
+    )
+    return (SORTERS[sort] ? found.sort(SORTERS[sort]) : found).map(toProductData)
+  }, [q, category, supplier, delivery, min, max, stockOnly, sort])
+}
+
+/** How many products each category, supplier and delivery method holds, for
+    the counts next to the filter checks of the list screen. */
+export function useFilterCounts(): Record<string, number> {
+  return useMemo(() => {
+    const counts: Record<string, number> = {}
+    for (const product of products) {
+      for (const id of [product.categoryId, product.supplierId, ...product.deliveryIds]) {
+        counts[id] = (counts[id] ?? 0) + 1
+      }
+    }
+    return counts
+  }, [])
+}
+
