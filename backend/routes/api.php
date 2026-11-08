@@ -1,6 +1,7 @@
 <?php
 
 use App\Data\PingData;
+use App\Http\Controllers\Api\Admin\ProductController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CatalogueController;
 use Illuminate\Support\Facades\Route;
@@ -23,4 +24,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/admin/ping', fn () => new PingData(ok: true));
+
+    Route::get('/admin/products', [ProductController::class, 'index']);
+    Route::post('/admin/products', [ProductController::class, 'store']);
+    Route::get('/admin/products/{product}', [ProductController::class, 'show']);
+    Route::put('/admin/products/{product}', [ProductController::class, 'update']);
+    Route::delete('/admin/products/{product}', [ProductController::class, 'destroy']);
 });

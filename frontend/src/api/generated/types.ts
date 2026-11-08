@@ -102,6 +102,19 @@ password: string,
 terms: boolean,
 };
 export type StockStatus = 'in_stock' | 'low_stock' | 'out_of_stock';
+export type StoreProductData = {
+name: string,
+categoryId: string,
+supplierId: string,
+priceCents: number,
+stock: number,
+description: string,
+image: string,
+specs: {
+label: string,
+value: string,
+}[],
+};
 export type SupplierData = {
 id: string,
 name: string,
