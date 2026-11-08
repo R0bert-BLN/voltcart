@@ -3,7 +3,11 @@
 export type MockupVariantFlag = 'secondary' | 'ghost' | 'danger' | 'block'
 
 /** Empty string means the default button variant. */
-export type MockupVariant = '' | MockupVariantFlag
+export type MockupVariant =
+  | ''
+  | MockupVariantFlag
+  | `${MockupVariantFlag} ${MockupVariantFlag}`
+  | `${MockupVariantFlag} ${MockupVariantFlag} ${MockupVariantFlag}`
 
 type PrimitiveVariant = 'default' | 'secondary' | 'ghost' | 'destructive'
 
