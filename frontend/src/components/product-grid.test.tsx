@@ -1,3 +1,4 @@
+import { createMemoryHistory, createRootRoute, createRouter, RouterProvider } from '@tanstack/react-router'
 import userEvent from '@testing-library/user-event'
 import { render, screen, within } from '@testing-library/react'
 
@@ -20,9 +21,19 @@ const product = (id: string, overrides: Partial<ProductData> = {}): ProductData 
   ...overrides,
 })
 
+/** Renders inside a minimal router, since each card's name is a router link. */
+const renderGrid = async (ui: React.ReactElement) => {
+  const router = createRouter({
+    routeTree: createRootRoute({ component: () => ui }),
+    history: createMemoryHistory(),
+  })
+  await router.load()
+  render(<RouterProvider router={router} />)
+}
+
 describe('ProductGrid', () => {
-  it('renders one card per product with its own stock status', () => {
-    render(<ProductGrid products={[product('p1'), product('p2', { stock: 0 })]} />)
+  it('renders one card per product with its own stock status', async () => {
+    await renderGrid(<ProductGrid products={[product('p1'), product('p2', { stock: 0 })]} />)
 
     const cards = screen.getAllByRole('article')
     expect(cards).toHaveLength(2)
@@ -31,8 +42,8 @@ describe('ProductGrid', () => {
     expect(within(cards[1]!).getByRole('button', { name: 'Out of stock' })).toBeDisabled()
   })
 
-  it('marks the wished products through their ids', () => {
-    render(<ProductGrid products={[product('p1'), product('p2')]} wishedIds={['p2']} />)
+  it('marks the wished products through their ids', async () => {
+    await renderGrid(<ProductGrid products={[product('p1'), product('p2')]} wishedIds={['p2']} />)
 
     const cards = screen.getAllByRole('article')
     expect(within(cards[0]!).getByRole('button', { name: 'Add to wish list' })).toHaveAttribute(
@@ -49,7 +60,7 @@ describe('ProductGrid', () => {
     const user = userEvent.setup()
     const onWish = vi.fn()
     const onAdd = vi.fn()
-    render(<ProductGrid products={[product('p1'), product('p2')]} onWish={onWish} onAdd={onAdd} />)
+    await renderGrid(<ProductGrid products={[product('p1'), product('p2')]} onWish={onWish} onAdd={onAdd} />)
 
     const cards = screen.getAllByRole('article')
     await user.click(within(cards[1]!).getByRole('button', { name: 'Add to wish list' }))
