@@ -67,6 +67,17 @@ export function addProduct(input: NewProductInput): Product {
   return product
 }
 
+/** Saves the edited fields of one product (mockup MK.catalog.update): the
+    change lands in the admin table and the store straight away, until the
+    page reloads. Returns undefined for an unknown id. */
+export function updateProduct(id: string, input: NewProductInput): Product | undefined {
+  const product = [...addedProducts, ...products].find((candidate) => candidate.id === id)
+  if (!product) return undefined
+  Object.assign(product, input, { updated: demoToday })
+  emitChange()
+  return product
+}
+
 /** A category on the home carousel, with the products it holds. */
 export interface HomeCategory extends Category {
   productsCount: number
