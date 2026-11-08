@@ -4,7 +4,9 @@ namespace App\Data\Catalogue;
 
 use App\Enums\StockStatus;
 use Spatie\LaravelData\Data;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 class ProductData extends Data
 {
     public function __construct(

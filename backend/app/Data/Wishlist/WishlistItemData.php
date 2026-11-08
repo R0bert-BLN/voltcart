@@ -5,7 +5,9 @@ namespace App\Data\Wishlist;
 use App\Models\WishlistItem;
 use Carbon\CarbonInterface;
 use Spatie\LaravelData\Data;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 class WishlistItemData extends Data
 {
     public function __construct(

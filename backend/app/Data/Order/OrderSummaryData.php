@@ -4,7 +4,9 @@ namespace App\Data\Order;
 
 use App\Models\Order;
 use Spatie\LaravelData\Data;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 class OrderSummaryData extends Data
 {
     public function __construct(

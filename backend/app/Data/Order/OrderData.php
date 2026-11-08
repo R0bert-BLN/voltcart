@@ -3,7 +3,9 @@
 namespace App\Data\Order;
 
 use Spatie\LaravelData\Data;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 class OrderData extends Data
 {
     /**

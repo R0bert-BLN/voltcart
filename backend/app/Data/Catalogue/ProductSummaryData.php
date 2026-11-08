@@ -3,7 +3,9 @@
 namespace App\Data\Catalogue;
 
 use Spatie\LaravelData\Data;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 class ProductSummaryData extends Data
 {
     public function __construct(

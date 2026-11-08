@@ -4,7 +4,9 @@ namespace App\Data\Admin;
 
 use App\Data\Catalogue\ProductSummaryData;
 use Spatie\LaravelData\Data;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 class DashboardData extends Data
 {
     /**

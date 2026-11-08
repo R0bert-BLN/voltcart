@@ -3,7 +3,9 @@
 namespace App\Data\Checkout;
 
 use Spatie\LaravelData\Data;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 class PlaceOrderData extends Data
 {
     public function __construct(

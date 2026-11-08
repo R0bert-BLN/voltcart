@@ -21,8 +21,8 @@ class TypeScriptTransformerServiceProvider extends BaseTypeScriptTransformerServ
             ->extension(new LaravelDataTypeScriptTransformerExtension)
             ->transformer(AttributedClassTransformer::class)
             ->transformer(EnumTransformer::class)
-            ->transformDirectories(app_path())
-            ->outputDirectory('/generated')
-            ->writer(new FlatModuleWriter('types.ts'));
+            ->transformDirectories(...(array) config('typescript-transformer.directories'))
+            ->outputDirectory((string) config('typescript-transformer.output.directory'))
+            ->writer(new FlatModuleWriter((string) config('typescript-transformer.output.file')));
     }
 }

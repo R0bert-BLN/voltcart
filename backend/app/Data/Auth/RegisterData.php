@@ -3,7 +3,9 @@
 namespace App\Data\Auth;
 
 use Spatie\LaravelData\Data;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 class RegisterData extends Data
 {
     public function __construct(

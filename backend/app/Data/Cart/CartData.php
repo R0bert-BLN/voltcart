@@ -3,7 +3,9 @@
 namespace App\Data\Cart;
 
 use Spatie\LaravelData\Data;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 class CartData extends Data
 {
     /**
