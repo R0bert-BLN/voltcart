@@ -13,3 +13,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });
+
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+    Route::get('/admin/ping', fn () => new PingData(ok: true));
+});
