@@ -142,3 +142,10 @@ phone: string | null,
 role: string,
 };
 export type UserRole = 'client' | 'admin';
+export type WishlistItemData = {
+productId: string,
+name: string,
+priceCents: number,
+image: string,
+addedAt: string,
+};

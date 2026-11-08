@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Admin\ProductController;
 use App\Http\Controllers\Api\Admin\StockController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CatalogueController;
+use App\Http\Controllers\Api\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/ping', fn () => new PingData(ok: true));
@@ -22,6 +23,12 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
+});
+
+Route::middleware(['auth:sanctum', 'client'])->group(function () {
+    Route::get('/wishlist', [WishlistController::class, 'index']);
+    Route::put('/wishlist/{product}', [WishlistController::class, 'store']);
+    Route::delete('/wishlist/{product}', [WishlistController::class, 'destroy']);
 });
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
