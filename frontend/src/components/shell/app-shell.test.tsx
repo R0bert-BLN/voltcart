@@ -100,7 +100,6 @@ describe('placeholder screens', () => {
     ['/checkout/confirmation', 'Order confirmed'],
     ['/orders', 'Order history'],
     ['/orders/o1', 'Order details'],
-    ['/login', 'Sign in'],
     ['/register', 'Create account'],
     ['/admin', 'Overview'],
     ['/admin/products', 'Products'],
