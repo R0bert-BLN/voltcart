@@ -2,6 +2,7 @@ import { ApiError } from '@/api/client'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { apiRequest, clearToken, getToken, setToken } from '@/api/client'
+import type { UserData } from '@/api/generated/types'
 
 export async function login(credentials: { email: string; password: string }) {
   const data = await apiRequest<{ token: string; user: unknown }>('/login', {
@@ -26,8 +27,8 @@ export async function logout() {
   clearToken()
 }
 
-export async function fetchMe(): Promise<unknown> {
-  return apiRequest<unknown>('/me')
+export async function fetchMe(): Promise<UserData> {
+  return apiRequest<UserData>('/me')
 }
 
 export function useMe() {

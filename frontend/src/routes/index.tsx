@@ -1,20 +1,13 @@
-import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
-import type { PingData } from '@/api/generated/types'
 
+import { PlaceholderScreen } from '@/components/shell/placeholder'
+
+/** catalog-home: the store home. */
 export const Route = createFileRoute('/')({
-  component: Home,
+  component: () => (
+    <PlaceholderScreen
+      title="Store home"
+      text="The store home with its category tiles and popular products arrives with the catalogue tickets."
+    />
+  ),
 })
-
-function Home() {
-  const ping = useQuery({
-    queryKey: ['ping'],
-    queryFn: async (): Promise<PingData> => (await fetch('/api/ping')).json(),
-  })
-  return (
-    <main className="p-10">
-      <h1 className="text-2xl font-semibold">Voltcart</h1>
-      <p>API: {ping.isPending ? 'checking…' : ping.data?.ok ? 'connected' : 'not reachable'}</p>
-    </main>
-  )
-}
