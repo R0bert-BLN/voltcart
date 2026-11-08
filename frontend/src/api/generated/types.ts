@@ -94,6 +94,17 @@ quantity: number,
 lineTotalCents: number,
 };
 export type OrderStatus = 'processing' | 'shipped' | 'delivered' | 'cancelled';
+export type OrderSummaryData = {
+id: string,
+status: string,
+paymentMethod: string,
+subtotalCents: number,
+deliveryCents: number,
+totalCents: number,
+estimatedAt: string | null,
+createdAt: string,
+itemCount: number,
+};
 export type PaginatedDataCollection<TKey, TValue> = LengthAwarePaginator<TKey, TValue>;
 export type PingData = {
 ok: boolean,
