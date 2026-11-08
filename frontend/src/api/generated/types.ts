@@ -42,3 +42,4 @@ export type PaginatedDataCollection<TKey, TValue> = LengthAwarePaginator<TKey, T
 export type PingData = {
 ok: boolean,
 };
+export type UserRole = 'client' | 'admin';
