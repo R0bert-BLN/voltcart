@@ -22,6 +22,12 @@ prev_page_url: string | null,
 },
 };
 export type CursorPaginatorInterface<TKey, TValue> = CursorPaginator<TKey, TValue>;
+export type DeliveryMethodData = {
+id: string,
+name: string,
+priceCents: number,
+days: number,
+};
 export type LengthAwarePaginator<TKey, TValue> = {
 data: TKey extends string ? Record<TKey, TValue> : TValue[],
 links: {
@@ -53,6 +59,23 @@ export type PaginatedDataCollection<TKey, TValue> = LengthAwarePaginator<TKey, T
 export type PingData = {
 ok: boolean,
 };
+export type ProductData = {
+id: string,
+name: string,
+description: string,
+priceCents: number,
+stock: number,
+image: string,
+stockStatus: StockStatus,
+specs: {
+label: string,
+value: string,
+}[],
+supplier: SupplierData | null,
+deliveryMethods: DeliveryMethodData[],
+categoryId: string | null,
+categoryName: string | null,
+};
 export type ProductFilterData = {
 search: string | null,
 category: string | null,
@@ -77,6 +100,12 @@ name: string,
 email: string,
 password: string,
 terms: boolean,
+};
+export type StockStatus = 'in_stock' | 'low_stock' | 'out_of_stock';
+export type SupplierData = {
+id: string,
+name: string,
+country: string,
 };
 export type TokenData = {
 token: string,

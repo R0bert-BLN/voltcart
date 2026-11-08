@@ -9,6 +9,9 @@ Route::get('/ping', fn () => new PingData(ok: true));
 
 Route::get('/categories', [CatalogueController::class, 'categories']);
 Route::get('/products', [CatalogueController::class, 'products']);
+Route::get('/products/{product}', [CatalogueController::class, 'show']);
+Route::get('/suppliers', [CatalogueController::class, 'suppliers']);
+Route::get('/delivery-methods', [CatalogueController::class, 'deliveryMethods']);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);

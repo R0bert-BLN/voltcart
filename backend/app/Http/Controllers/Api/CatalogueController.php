@@ -3,11 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Data\Catalogue\CategoryData;
+use App\Data\Catalogue\DeliveryMethodData;
+use App\Data\Catalogue\ProductData;
 use App\Data\Catalogue\ProductSummaryData;
+use App\Data\Catalogue\SupplierData;
+use App\Enums\StockStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\DeliveryMethod;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\Supplier;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -108,5 +114,35 @@ class CatalogueController extends Controller
                 'total' => $paginator->total(),
             ],
         ]);
+    }
+
+    public function show(Product $product): ProductData
+    {
+        $product->load(['category', 'supplier', 'deliveryMethods']);
+
+        return new ProductData(
+            id: $product->id,
+            name: $product->name,
+            description: $product->description,
+            priceCents: $product->price_cents,
+            stock: $product->stock,
+            stockStatus: StockStatus::fromStock($product->stock),
+            image: $product->image,
+            specs: $product->specs ?? [],
+            supplier: $product->supplier !== null ? SupplierData::from($product->supplier) : null,
+            deliveryMethods: DeliveryMethodData::collect($product->deliveryMethods)->values()->all(),
+            categoryId: $product->category_id,
+            categoryName: $product->category->name,
+        );
+    }
+
+    public function suppliers(): JsonResponse
+    {
+        return response()->json(SupplierData::collect(Supplier::query()->orderBy('name')->get()));
+    }
+
+    public function deliveryMethods(): JsonResponse
+    {
+        return response()->json(DeliveryMethodData::collect(DeliveryMethod::query()->orderBy('name')->get()));
     }
 }
