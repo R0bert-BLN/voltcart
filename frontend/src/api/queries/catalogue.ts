@@ -1,7 +1,7 @@
 import type { ProductData } from '@/api/generated/types'
 import type { IconName } from '@/components/ui/icon'
 import { useSyncExternalStore } from 'react'
-import { categories, deliveryMethods, products, suppliers, users, type Category, type DeliveryMethod, type Product, type Supplier } from '@/lib/mock-data'
+import { categories, demoToday, deliveryMethods, products, suppliers, users, type Category, type DeliveryMethod, type Product, type ProductSpec, type Supplier } from '@/lib/mock-data'
 
 /** The data layer keeps kebab-case lucide names; the Icon types them. */
 export const asIconName = (name: string): IconName => name as IconName
@@ -10,6 +10,8 @@ export const asIconName = (name: string): IconName => name as IconName
     are kept by id here and applied by every catalogue hook, so they survive
     navigation and stay visible in the store too, until the page reloads. */
 const deletedIds = new Set<string>()
+/** The products the forms added, newest first, shown above the shipped ones. */
+const addedProducts: Product[] = []
 const listeners = new Set<() => void>()
 let version = 0
 
@@ -29,7 +31,8 @@ export function useDemoChange(): number {
 }
 
 /** The catalogue without the products an admin deleted. */
-const visibleProducts = (): Product[] => products.filter((product) => !deletedIds.has(product.id))
+const visibleProducts = (): Product[] =>
+  [...addedProducts, ...products].filter((product) => !deletedIds.has(product.id))
 
 /** Deletes one product from the demo catalogue, and with it the cart lines
     and wish-list entries that point at the product (mockup MK.catalog.remove). */
@@ -40,6 +43,28 @@ export function deleteProduct(id: string): void {
     if (user.wishlist) user.wishlist = user.wishlist.filter((entry) => entry !== id)
   }
   emitChange()
+}
+
+/** The validated fields the product form submits, in the data layer's shape. */
+export interface NewProductInput {
+  name: string
+  description: string
+  specs: ProductSpec[]
+  /** Price in euros, as the shipped data keeps it. */
+  price: number
+  stock: number
+  supplierId: string
+  categoryId: string
+  deliveryIds: string[]
+}
+
+/** Adds one product to the demo catalogue (mockup MK.catalog.add): it shows
+    in the admin table and the store straight away, until the page reloads. */
+export function addProduct(input: NewProductInput): Product {
+  const product: Product = { ...input, id: `new-${Date.now()}`, updated: demoToday }
+  addedProducts.unshift(product)
+  emitChange()
+  return product
 }
 
 /** A category on the home carousel, with the products it holds. */

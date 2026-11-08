@@ -53,6 +53,38 @@ describe('ProductForm', () => {
     expect(screen.getByRole('alert')).toHaveTextContent('Pick at least one delivery method.')
   })
 
+  it('shows the inline errors under their fields and marks the fields invalid', () => {
+    render(
+      <ProductForm
+        {...props}
+        errors={{
+          name: 'Enter a product name.',
+          price: 'Enter a price.',
+          stock: 'Enter the units in stock.',
+          supplierId: 'Choose a supplier.',
+          categoryId: 'Choose a category.',
+        }}
+      />,
+    )
+
+    expect(screen.getByText('Enter a product name.')).toBeVisible()
+    expect(screen.getByText('Enter a price.')).toBeVisible()
+    expect(screen.getByText('Enter the units in stock.')).toBeVisible()
+    expect(screen.getByText('Choose a supplier.')).toBeVisible()
+    expect(screen.getByText('Choose a category.')).toBeVisible()
+
+    for (const name of ['Name', 'Price (€)', 'Stock', 'Supplier', 'Category']) {
+      expect(screen.getByLabelText(name)).toBeInvalid()
+    }
+    // The description takes no error; the delivery group keeps its own alert.
+    expect(screen.getByLabelText('Description')).not.toBeInvalid()
+    expect(
+      screen
+        .getAllByRole('alert')
+        .filter((alert) => alert.textContent === 'Choose at least one delivery method.'),
+    ).toHaveLength(0)
+  })
+
   it('adds and removes specification rows', async () => {
     const user = userEvent.setup()
     render(<ProductForm product={product} {...props} />)

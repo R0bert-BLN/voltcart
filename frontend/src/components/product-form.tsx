@@ -34,6 +34,16 @@ export interface ProductFormProduct {
   specs?: Array<{ label?: string; value?: string }>
 }
 
+/** Inline validation messages for the required fields; the delivery group
+    error comes separately as `deliveryError` (the checkboxes share a name). */
+export interface ProductFormErrors {
+  name?: string
+  price?: string
+  stock?: string
+  supplierId?: string
+  categoryId?: string
+}
+
 export interface ProductFormProps extends React.ComponentProps<'form'> {
   product?: ProductFormProduct
   suppliers: ProductFormOption[]
@@ -41,6 +51,8 @@ export interface ProductFormProps extends React.ComponentProps<'form'> {
   deliveryMethods: ProductFormDelivery[]
   /** Validation message shown at the foot of the delivery group. */
   deliveryError?: string
+  /** Validation messages shown under the matching field. */
+  errors?: ProductFormErrors
   /** Buttons and links for the sticky aside beside the form. */
   actions?: React.ReactNode
   className?: string
@@ -63,6 +75,7 @@ export function ProductForm({
   categories,
   deliveryMethods,
   deliveryError,
+  errors,
   actions,
   className,
   ...props
@@ -101,6 +114,7 @@ export function ProductForm({
             required
             maxLength={80}
             defaultValue={product.name}
+            error={errors?.name}
           />
           <div data-slot="field" className="flex flex-col gap-1 text-sm">
             <label className="font-medium" htmlFor={descriptionId}>
@@ -172,6 +186,7 @@ export function ProductForm({
               step="0.01"
               inputMode="decimal"
               defaultValue={product.priceCents == null ? undefined : product.priceCents / 100}
+              error={errors?.price}
             />
             <Field
               label="Stock"
@@ -182,6 +197,7 @@ export function ProductForm({
               max="99999"
               step="1"
               defaultValue={product.stock == null ? undefined : product.stock}
+              error={errors?.stock}
             />
           </div>
         </Card>
@@ -194,16 +210,18 @@ export function ProductForm({
               name="supplierId"
               required
               placeholder="Choose a supplier"
-              defaultValue={product.supplierId}
+              defaultValue={product.supplierId ?? ''}
               options={suppliers}
+              error={errors?.supplierId}
             />
             <Select
               label="Category"
               name="categoryId"
               required
               placeholder="Choose a category"
-              defaultValue={product.categoryId}
+              defaultValue={product.categoryId ?? ''}
               options={categories}
+              error={errors?.categoryId}
             />
           </div>
           <FilterGroup title="Delivery methods">

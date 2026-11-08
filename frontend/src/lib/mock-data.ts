@@ -82,6 +82,9 @@ export type Product = {
   specs: ProductSpec[],
 };
 
+/** The demo's "today" (mockup MK.config.today), for records a change adds. */
+export const demoToday = '2026-11-02'
+
 export const users: User[] = [
   {id: "u-client",role: "client",name: "Maya Keller",email: "maya.keller@example.com",phone: "+353 87 555 0142",address: {line1: "14 Harbour Road",city: "Galway",postcode: "H91 X2K7",country: "Ireland"},wishlist: ["au-halden-nc","mn-vanta-34","sh-ostra-cam"],cart: [{id: "lp-aster-14",qty: 1},{id: "ac-kite-mouse",qty: 2}]},
   {id: "u-admin",role: "admin",name: "Daniel Roth",email: "daniel.roth@voltcart.example"},
