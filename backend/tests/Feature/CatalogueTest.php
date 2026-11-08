@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Category;
+use App\Models\DeliveryMethod;
 use App\Models\Supplier;
 
 it('creates categories from the factory', function () {
@@ -31,4 +32,23 @@ it('creates suppliers from the factory', function () {
         ->name->toBe('Volt GmbH')
         ->country->toBe('Germany')
         ->and(Supplier::find('volt-gmbh'))->not->toBeNull();
+});
+
+it('creates delivery methods from the factory', function () {
+    $method = DeliveryMethod::factory()->create([
+        'id' => 'express',
+        'name' => 'Express delivery',
+        'price_cents' => 999,
+        'time' => '1 day',
+        'days' => 1,
+    ]);
+
+    expect($method)
+        ->exists->toBeTrue()
+        ->id->toBe('express')
+        ->name->toBe('Express delivery')
+        ->price_cents->toBe(999)
+        ->time->toBe('1 day')
+        ->days->toBe(1)
+        ->and(DeliveryMethod::find('express'))->not->toBeNull();
 });
