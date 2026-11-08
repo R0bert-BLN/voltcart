@@ -20,6 +20,17 @@ export function usePlaceOrder() {
   })
 }
 
+/** The full order history of the signed-in client, GET /orders (the mockup's
+    MK.orders.list); a guest does not run the query. */
+export function useOrders() {
+  return useQuery({
+    queryKey: ['orders', 'list'],
+    queryFn: (): Promise<OrderSummaryData[]> => apiRequest<OrderSummaryData[]>('/orders'),
+    enabled: getToken() !== null,
+    retry: false,
+  })
+}
+
 /** One order of the signed-in client, fresh from GET /orders/{id}; without
     an id the query falls back to the latest order still processing (the
     mockup's fallback when the screen opens without one) and reads as null
