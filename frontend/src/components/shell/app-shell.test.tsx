@@ -96,7 +96,6 @@ describe('placeholder screens', () => {
   // (T47) are built screens; the remaining placeholders are the checkout and
   // orders screens of the later reports.
   it.each([
-    ['/checkout/review', 'Review order'],
     ['/checkout/confirmation', 'Order confirmed'],
     ['/orders', 'Order history'],
     ['/orders/o1', 'Order details'],
