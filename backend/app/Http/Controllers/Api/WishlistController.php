@@ -16,6 +16,9 @@ class WishlistController extends Controller
     {
         $items = WishlistItem::query()
             ->where('user_id', $request->user()->id)
+            ->with('product.category')
+            ->orderBy('added_at')
+            ->orderBy('id')
             ->get();
 
         return response()->json(WishlistItemData::collect($items));
@@ -27,6 +30,7 @@ class WishlistController extends Controller
             'user_id' => $request->user()->id,
             'product_id' => $product->id,
         ], ['added_at' => now()]);
+        $item->load('product.category');
 
         return response()->json(WishlistItemData::fromModel($item), $item->wasRecentlyCreated ? 201 : 200);
     }

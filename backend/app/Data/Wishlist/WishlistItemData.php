@@ -16,6 +16,9 @@ class WishlistItemData extends Data
         public int $priceCents,
         public string $image,
         public CarbonInterface $addedAt,
+        public int $stock,
+        public string $categoryId,
+        public string $categoryName,
     ) {}
 
     public static function fromModel(WishlistItem $item): self
@@ -28,6 +31,9 @@ class WishlistItemData extends Data
             priceCents: $product->price_cents,
             image: $product->image,
             addedAt: $item->added_at,
+            stock: $product->stock,
+            categoryId: $product->category_id,
+            categoryName: $product->category->name,
         );
     }
 }

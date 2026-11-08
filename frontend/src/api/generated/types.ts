@@ -201,4 +201,7 @@ name: string,
 priceCents: number,
 image: string,
 addedAt: string,
+stock: number,
+categoryId: string,
+categoryName: string,
 };

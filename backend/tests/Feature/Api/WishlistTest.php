@@ -24,7 +24,10 @@ it('lists only the wishlist items of the authenticated client', function () {
         ->getJson('/api/wishlist')
         ->assertOk()
         ->assertJsonCount(1)
-        ->assertJsonPath('0.productId', $mine->id);
+        ->assertJsonPath('0.productId', $mine->id)
+        ->assertJsonPath('0.stock', $mine->stock)
+        ->assertJsonPath('0.categoryId', $mine->category_id)
+        ->assertJsonPath('0.categoryName', $mine->category->name);
 });
 
 it('rejects guests from the wishlist', function () {
@@ -38,7 +41,9 @@ it('adds a product to the wishlist idempotently', function () {
     $this->actingAs($client, 'sanctum')
         ->putJson("/api/wishlist/{$product->id}")
         ->assertCreated()
-        ->assertJsonPath('productId', $product->id);
+        ->assertJsonPath('productId', $product->id)
+        ->assertJsonPath('stock', $product->stock)
+        ->assertJsonPath('categoryName', $product->category->name);
 
     $this->actingAs($client, 'sanctum')
         ->putJson("/api/wishlist/{$product->id}")

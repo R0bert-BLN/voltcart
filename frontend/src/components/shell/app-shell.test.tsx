@@ -92,8 +92,9 @@ describe('auth screens', () => {
 })
 
 describe('placeholder screens', () => {
+  // The wish list is a built screen (T44); the remaining placeholders are
+  // the cart and checkout/orders screens of the later reports.
   it.each([
-    ['/wishlist', 'Wish list'],
     ['/cart', 'Cart'],
     ['/checkout/details', 'Delivery and payment'],
     ['/checkout/review', 'Review order'],
@@ -110,8 +111,8 @@ describe('placeholder screens', () => {
   it('goes back through the history when the placeholder button is used', async () => {
     const { router } = await renderRoute('/')
 
-    await userEvent.click(screen.getByRole('link', { name: 'Wish list' }))
-    await waitFor(() => expect(router.state.location.pathname).toBe('/wishlist'))
+    await userEvent.click(screen.getByRole('link', { name: 'Cart' }))
+    await waitFor(() => expect(router.state.location.pathname).toBe('/cart'))
 
     await userEvent.click(screen.getByRole('button', { name: 'Go back' }))
     await waitFor(() => expect(router.state.location.pathname).toBe('/'))
