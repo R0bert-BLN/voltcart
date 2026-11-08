@@ -1,3 +1,9 @@
+export type CategoryData = {
+id: string,
+name: string,
+icon: string,
+productsCount: number,
+};
 export type CursorPaginatedDataCollection<TKey, TValue> = CursorPaginator<TKey, TValue>;
 export type CursorPaginator<TKey, TValue> = {
 data: TKey extends string ? Record<TKey, TValue> : TValue[],
@@ -46,6 +52,25 @@ export type OrderStatus = 'processing' | 'shipped' | 'delivered' | 'cancelled';
 export type PaginatedDataCollection<TKey, TValue> = LengthAwarePaginator<TKey, TValue>;
 export type PingData = {
 ok: boolean,
+};
+export type ProductFilterData = {
+search: string | null,
+category: string | null,
+supplier: string | null,
+deliveryMethod: string | null,
+priceMin: number | null,
+priceMax: number | null,
+inStock: boolean | null,
+sort: string | null,
+page: number | null,
+};
+export type ProductSummaryData = {
+id: string,
+name: string,
+categoryId: string,
+priceCents: number,
+stock: number,
+image: string,
 };
 export type RegisterData = {
 name: string,
