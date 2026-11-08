@@ -1,7 +1,18 @@
+import { createMemoryHistory, createRootRoute, createRouter, RouterProvider } from '@tanstack/react-router'
 import { render, screen } from '@testing-library/react'
 
 import { ProductCell } from '@/components/product-cell'
 import type { ProductData } from '@/api/generated/types'
+
+/** Renders inside a minimal router, since the name link is a router link. */
+const renderCell = async (ui: React.ReactElement) => {
+  const router = createRouter({
+    routeTree: createRootRoute({ component: () => ui }),
+    history: createMemoryHistory(),
+  })
+  await router.load()
+  render(<RouterProvider router={router} />)
+}
 
 const product = {
   id: 'p1',
@@ -10,8 +21,8 @@ const product = {
 } as Pick<ProductData, 'id' | 'name' | 'categoryId'>
 
 describe('ProductCell', () => {
-  it('renders the thumbnail image, name and sub line', () => {
-    render(
+  it('renders the thumbnail image, name and sub line', async () => {
+    await renderCell(
       <ProductCell product={product} href="/catalog/p1" sub="€1,149.00" />,
     )
 

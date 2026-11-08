@@ -1,8 +1,19 @@
 import userEvent from '@testing-library/user-event'
+import { createMemoryHistory, createRootRoute, createRouter, RouterProvider } from '@tanstack/react-router'
 import { render, screen, within } from '@testing-library/react'
 
 import { Button } from '@/components/button'
 import { ProductForm } from '@/components/product-form'
+
+/** Renders inside a minimal router, for the actions that carry an href. */
+const renderForm = async (ui: React.ReactElement) => {
+  const router = createRouter({
+    routeTree: createRootRoute({ component: () => ui }),
+    history: createMemoryHistory(),
+  })
+  await router.load()
+  render(<RouterProvider router={router} />)
+}
 
 const props = {
   suppliers: [{ value: 's1', label: 'Northlane Distribution' }],
@@ -114,7 +125,7 @@ describe('ProductForm', () => {
       event.preventDefault()
       event.currentTarget.checkValidity()
     })
-    render(
+    await renderForm(
       <ProductForm
         product={product}
         {...props}
@@ -127,7 +138,6 @@ describe('ProductForm', () => {
         onSubmit={onSubmit}
       />,
     )
-
     const aside = screen.getByRole('button', { name: 'Save changes' }).closest('aside')
     expect(aside).not.toBeNull()
     expect(within(aside!).getByRole('link', { name: 'View in store' })).toHaveAttribute(

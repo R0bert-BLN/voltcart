@@ -1,3 +1,5 @@
+import { Link, type LinkProps } from '@tanstack/react-router'
+
 import { cn } from 'cn'
 
 import { Icon } from '@/components/ui/icon'
@@ -28,9 +30,10 @@ export function Breadcrumb({ items, className, ...props }: BreadcrumbProps) {
           return (
             <li key={item.href ?? `${item.label}-${index}`} className="flex items-center gap-1">
               {item.href && !isCurrent ? (
-                <a href={item.href} className="hover:text-primary">
+                // The router link, so the trail navigates within the app.
+                <Link to={item.href as LinkProps['to']} className="hover:text-primary">
                   {item.label}
-                </a>
+                </Link>
               ) : (
                 <span aria-current={isCurrent ? 'page' : undefined}>{item.label}</span>
               )}

@@ -1,3 +1,5 @@
+import { Link, type LinkProps } from '@tanstack/react-router'
+
 import { cn } from 'cn'
 import { Icon, type IconName } from '@/components/ui/icon'
 
@@ -55,9 +57,17 @@ export function Stat({ label, value, icon, tone = '', href, className, ...props 
 
   if (href) {
     return (
-      <a href={href} data-slot="stat" data-tone={tone} className={classes} {...props}>
+      // The router link, so the tile navigates within the app in place of a
+      // full page load.
+      <Link
+        to={href as LinkProps['to']}
+        data-slot="stat"
+        data-tone={tone}
+        className={classes}
+        {...props}
+      >
         {body}
-      </a>
+      </Link>
     )
   }
 

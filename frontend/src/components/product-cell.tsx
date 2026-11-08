@@ -1,3 +1,5 @@
+import { Link, type LinkProps } from '@tanstack/react-router'
+
 import { cn } from 'cn'
 import { ProductImage } from '@/components/product-image'
 import type { ProductData } from '@/api/generated/types'
@@ -22,12 +24,13 @@ export function ProductCell({ product, href, sub, className }: ProductCellProps)
       <ProductImage product={product} size="sm" />
       <div className="flex min-w-0 flex-col items-start gap-1">
         {href ? (
-          <a
-            href={href}
+          // The router link, so the name navigates within the app.
+          <Link
+            to={href as LinkProps['to']}
             className="font-medium text-text [overflow-wrap:anywhere] no-underline hover:text-primary hover:underline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >
             {product.name}
-          </a>
+          </Link>
         ) : (
           <span className="font-medium text-text [overflow-wrap:anywhere]">{product.name}</span>
         )}

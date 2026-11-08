@@ -1,5 +1,7 @@
 import { cn } from 'cn'
 
+import { Link, type LinkProps } from '@tanstack/react-router'
+
 import { Button as ButtonPrimitive } from '@/components/ui/button'
 import { Icon, type IconName } from '@/components/ui/icon'
 import { parseVariant, type MockupVariant } from '@/components/variant'
@@ -49,15 +51,20 @@ export function Button({
 
   if (href) {
     return (
+      // The router link, so a button with an href navigates within the app
+      // in place of a full page load.
       <ButtonPrimitive
         asChild
         className={classes}
         variant={tone === 'default' ? undefined : tone}
         {...props}
       >
-        <a href={href} aria-disabled={props['aria-disabled'] ? 'true' : undefined}>
+        <Link
+          to={href as LinkProps['to']}
+          aria-disabled={props['aria-disabled'] ? 'true' : undefined}
+        >
           {inner}
-        </a>
+        </Link>
       </ButtonPrimitive>
     )
   }
