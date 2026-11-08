@@ -1,7 +1,6 @@
 # AGENTS.md
 - Stack: Laravel 13 + spatie/laravel-data + Sanctum API tokens + Postgres (backend/), React 19 + TypeScript + TanStack Router/Query + Tailwind 4 + shadcn/ui (frontend/), all in Docker Compose.
 - Nothing runs on the host: use `docker compose exec backend …` (php, composer, artisan, pest) and `docker compose exec frontend …` (pnpm, vitest).
-- Read only the files named in the ticket, and the files they import. Do not explore the repository.
 - Tickets come from the Kanzo board. Each ticket holds its design notes inline; mockup paths are a visual reference, not code to port.
 - Backend: endpoints take and return spatie-data DTOs from `app/Data/`; money is integer cents; after changing DTOs run `php artisan typescript:transform`.
 - Frontend: data only through the hooks in `src/api/queries/`; styles only through theme tokens and Tailwind classes, no raw colours.
