@@ -122,3 +122,14 @@ export function useFilterCounts(): Record<string, number> {
   }, [])
 }
 
+/** One product of the catalogue, undefined when the id is unknown. */
+export function useProduct(id: string): Product | undefined {
+  return products.find((product) => product.id === id)
+}
+
+/** The company that supplies one product, for the supplier card of the
+    details screen. */
+export function productSupplier(product: Product): Supplier {
+  return suppliers.find((supplier) => supplier.id === product.supplierId)!
+}
+

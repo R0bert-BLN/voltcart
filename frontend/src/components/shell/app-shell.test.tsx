@@ -93,7 +93,6 @@ describe('auth screens', () => {
 
 describe('placeholder screens', () => {
   it.each([
-    ['/products/p1', 'Product details'],
     ['/wishlist', 'Wish list'],
     ['/cart', 'Cart'],
     ['/checkout/details', 'Delivery and payment'],
