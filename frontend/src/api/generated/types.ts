@@ -38,9 +38,30 @@ to: number | null,
 },
 };
 export type LengthAwarePaginatorInterface<TKey, TValue> = LengthAwarePaginator<TKey, TValue>;
+export type LoginData = {
+email: string,
+password: string,
+};
 export type OrderStatus = 'processing' | 'shipped' | 'delivered' | 'cancelled';
 export type PaginatedDataCollection<TKey, TValue> = LengthAwarePaginator<TKey, TValue>;
 export type PingData = {
 ok: boolean,
+};
+export type RegisterData = {
+name: string,
+email: string,
+password: string,
+terms: boolean,
+};
+export type TokenData = {
+token: string,
+user: UserData,
+};
+export type UserData = {
+id: number,
+name: string,
+email: string,
+phone: string | null,
+role: string,
 };
 export type UserRole = 'client' | 'admin';
