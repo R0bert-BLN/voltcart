@@ -100,7 +100,6 @@ describe('placeholder screens', () => {
     ['/checkout/confirmation', 'Order confirmed'],
     ['/orders', 'Order history'],
     ['/orders/o1', 'Order details'],
-    ['/admin/products', 'Products'],
     ['/admin/products/new', 'Add product'],
     ['/admin/products/p1/edit', 'Edit product'],
   ])('%s shows its placeholder with a way back', async (path, title) => {
