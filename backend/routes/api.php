@@ -1,7 +1,9 @@
 <?php
 
 use App\Data\PingData;
+use App\Http\Controllers\Api\Admin\DashboardController;
 use App\Http\Controllers\Api\Admin\ProductController;
+use App\Http\Controllers\Api\Admin\StockController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CatalogueController;
 use Illuminate\Support\Facades\Route;
@@ -30,4 +32,8 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/admin/products/{product}', [ProductController::class, 'show']);
     Route::put('/admin/products/{product}', [ProductController::class, 'update']);
     Route::delete('/admin/products/{product}', [ProductController::class, 'destroy']);
+
+    Route::patch('/admin/products/{product}/stock', [StockController::class, 'update']);
+
+    Route::get('/admin/dashboard', [DashboardController::class, 'index']);
 });

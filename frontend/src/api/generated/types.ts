@@ -22,6 +22,13 @@ prev_page_url: string | null,
 },
 };
 export type CursorPaginatorInterface<TKey, TValue> = CursorPaginator<TKey, TValue>;
+export type DashboardData = {
+products: number,
+categories: number,
+lowStock: number,
+outOfStock: number,
+lowStockProducts: ProductSummaryData[],
+};
 export type DeliveryMethodData = {
 id: string,
 name: string,
@@ -102,6 +109,9 @@ password: string,
 terms: boolean,
 };
 export type StockStatus = 'in_stock' | 'low_stock' | 'out_of_stock';
+export type StockUpdateData = {
+stock: number,
+};
 export type StoreProductData = {
 name: string,
 categoryId: string,
