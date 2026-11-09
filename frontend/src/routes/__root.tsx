@@ -2,7 +2,7 @@ import type { QueryClient } from '@tanstack/react-query'
 import { createRootRouteWithContext } from '@tanstack/react-router'
 
 import { AppShell } from '@/components/shell/app-shell'
-import { Toaster } from '@/components/toaster'
+import { Toaster } from '@/components/common/toaster'
 
 export interface RouterContext {
   queryClient: QueryClient

@@ -4,16 +4,15 @@ import { useState } from 'react'
 import { getToken } from '@/api/client'
 import { useCart } from '@/api/queries/cart'
 import { useDeliveryMethods } from '@/api/queries/catalogue'
-import { Button } from '@/components/button'
-import { Empty } from '@/components/empty'
-import { Field } from '@/components/field'
-import { Note } from '@/components/note'
-import { OrderSummary } from '@/components/order-summary'
-import { PageHead } from '@/components/page-head'
-import { RadioCard } from '@/components/radio-card'
-import { RadioGroup } from '@/components/radio-group'
-import { Steps } from '@/components/steps'
-import { SubmitButton } from '@/components/submit-button'
+import { Button } from '@/components/common/button'
+import { Empty } from '@/components/common/empty'
+import { Field } from '@/components/forms/field'
+import { OrderSummary } from '@/components/orders/order-summary'
+import { PageHead } from '@/components/common/page-head'
+import { RadioCard } from '@/components/forms/radio-card'
+import { RadioGroup } from '@/components/forms/radio-group'
+import { Steps } from '@/components/checkout/steps'
+import { SubmitButton } from '@/components/forms/submit-button'
 import { Card } from '@/components/ui/card'
 import { formatPrice } from '@/lib/format'
 import { readDetails, saveDetails } from '@/lib/checkout'
@@ -285,7 +284,6 @@ function CheckoutDetailsScreen() {
               </div>
             ) : null}
           </Card>
-          <Note />
         </div>
         <aside aria-label="Order summary">
           <div className="flex flex-col gap-(--sp-3)">

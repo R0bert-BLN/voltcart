@@ -1,7 +1,7 @@
 import { useRouter } from '@tanstack/react-router'
 
-import { Empty } from '@/components/empty'
-import { PageHead } from '@/components/page-head'
+import { Empty } from '@/components/common/empty'
+import { PageHead } from '@/components/common/page-head'
 import { Icon } from '@/components/ui/icon'
 import { Button } from '@/components/ui/button'
 

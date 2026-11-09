@@ -3,11 +3,10 @@ import { useState } from 'react'
 
 import { ApiError } from '@/api/client'
 import { useRegister } from '@/api/queries/auth'
-import { Check } from '@/components/check'
-import { Field } from '@/components/field'
-import { Note } from '@/components/note'
-import { PageHead } from '@/components/page-head'
-import { SubmitButton } from '@/components/submit-button'
+import { Check } from '@/components/forms/check'
+import { Field } from '@/components/forms/field'
+import { PageHead } from '@/components/common/page-head'
+import { SubmitButton } from '@/components/forms/submit-button'
 import { Card } from '@/components/ui/card'
 import { showToast } from '@/lib/toasts'
 
@@ -143,7 +142,6 @@ function RegisterScreen() {
           Sign in
         </Link>
       </p>
-      <Note />
     </Card>
   )
 }

@@ -3,12 +3,12 @@ import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 
 import { getToken } from '@/api/client'
 import { useOrders } from '@/api/queries/orders'
-import { Button } from '@/components/button'
-import { Chips, type ChipItem } from '@/components/chips'
-import { Empty } from '@/components/empty'
-import { OrderStatusBadge } from '@/components/order-status'
-import { PageHead } from '@/components/page-head'
-import { Table } from '@/components/table'
+import { Button } from '@/components/common/button'
+import { Chips, type ChipItem } from '@/components/common/chips'
+import { Empty } from '@/components/common/empty'
+import { OrderStatusBadge } from '@/components/orders/order-status'
+import { PageHead } from '@/components/common/page-head'
+import { Table } from '@/components/common/table'
 import { formatPrice, formatTimestamp } from '@/lib/format'
 
 /** orders-list: the order history of the signed-in client (mockup screen

@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 
 import { useCategories, useDeliveryMethods, usePopularProducts, asIconName } from '@/api/queries/catalogue'
-import { Carousel } from '@/components/carousel'
-import { ProductGrid } from '@/components/product-grid'
-import { SectionTitle } from '@/components/section-title'
+import { Carousel } from '@/components/catalogue/carousel'
+import { ProductGrid } from '@/components/catalogue/product-grid'
+import { SectionTitle } from '@/components/common/section-title'
 import { Icon } from '@/components/ui/icon'
 import { formatPrice } from '@/lib/format'
 import { showToast } from '@/lib/toasts'

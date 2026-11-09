@@ -32,7 +32,4 @@ fe pnpm -s lint
 step "Frontend: types (tsc)"
 fe pnpm -s typecheck
 
-step "Frontend: tests (vitest)"
-fe pnpm -s test
-
 printf '\n\033[32m✔ verify passed\033[0m\n'

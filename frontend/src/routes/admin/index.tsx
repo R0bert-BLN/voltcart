@@ -2,13 +2,13 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { asIconName, useAdminOverview } from '@/api/queries/catalogue'
 import { useAdminName } from '@/api/queries/auth'
-import { Button } from '@/components/button'
-import { Empty } from '@/components/empty'
-import { List, ListRow } from '@/components/list'
-import { PageHead } from '@/components/page-head'
-import { ProductImage } from '@/components/product-image'
-import { SectionTitle } from '@/components/section-title'
-import { Stat } from '@/components/stat'
+import { Button } from '@/components/common/button'
+import { Empty } from '@/components/common/empty'
+import { List, ListRow } from '@/components/common/list'
+import { PageHead } from '@/components/common/page-head'
+import { ProductImage } from '@/components/catalogue/product-image'
+import { SectionTitle } from '@/components/common/section-title'
+import { Stat } from '@/components/admin/stat'
 
 /** The plural of count, as the mockup's plural(). */
 const plural = (count: number, word: string) => `${count} ${word}${count === 1 ? '' : 's'}`

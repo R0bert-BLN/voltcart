@@ -23,7 +23,10 @@ export function AppShell() {
 
   if (pathname === '/login' || pathname === '/register') {
     return (
-      <div data-slot="auth-layout" className="mx-auto w-full max-w-(--form-w) px-4 py-8">
+      <div
+        data-slot="auth-layout"
+        className="mx-auto flex min-h-dvh w-full max-w-(--form-w) flex-col justify-center px-4 py-8"
+      >
         <div className="mb-5 flex justify-center">
           <Brand to="/" />
         </div>
@@ -40,11 +43,6 @@ export function AppShell() {
       <main className="mx-auto w-full max-w-(--content-w) flex-1 px-6 pt-8 pb-12">
         <Outlet />
       </main>
-      <footer className="border-t border-border">
-        <div className="mx-auto flex w-full max-w-(--content-w) gap-4 px-6 py-5 text-sm text-(--text-muted)">
-          <span>Prices include VAT.</span>
-        </div>
-      </footer>
     </div>
   )
 }

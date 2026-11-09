@@ -5,19 +5,18 @@ import { getToken } from '@/api/client'
 import { useCart } from '@/api/queries/cart'
 import { useDeliveryMethods } from '@/api/queries/catalogue'
 import { usePlaceOrder } from '@/api/queries/orders'
-import { Button } from '@/components/button'
-import { Check } from '@/components/check'
-import { ContactBlock } from '@/components/contact-block'
-import { DeliveryBlock } from '@/components/delivery-block'
-import { Empty } from '@/components/empty'
-import { List } from '@/components/list'
-import { Note } from '@/components/note'
-import { OrderLine } from '@/components/order-line'
-import { PageHead } from '@/components/page-head'
-import { SectionTitle } from '@/components/section-title'
-import { Steps } from '@/components/steps'
-import { SubmitButton } from '@/components/submit-button'
-import { Totals } from '@/components/totals'
+import { Button } from '@/components/common/button'
+import { Check } from '@/components/forms/check'
+import { ContactBlock } from '@/components/orders/contact-block'
+import { DeliveryBlock } from '@/components/orders/delivery-block'
+import { Empty } from '@/components/common/empty'
+import { List } from '@/components/common/list'
+import { OrderLine } from '@/components/orders/order-line'
+import { PageHead } from '@/components/common/page-head'
+import { SectionTitle } from '@/components/common/section-title'
+import { Steps } from '@/components/checkout/steps'
+import { SubmitButton } from '@/components/forms/submit-button'
+import { Totals } from '@/components/orders/totals'
 import { Card } from '@/components/ui/card'
 import { clearDetails, readDetails } from '@/lib/checkout'
 
@@ -182,7 +181,6 @@ function CheckoutReviewScreen() {
               />
             </Card>
           </div>
-          <Note />
           {placeOrder.isError ? (
             <Empty
               icon="TriangleExclamationPoint"

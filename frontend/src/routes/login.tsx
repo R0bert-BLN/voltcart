@@ -4,9 +4,9 @@ import { useState } from 'react'
 import { ApiError } from '@/api/client'
 import type { UserData } from '@/api/generated/types'
 import { useLogin } from '@/api/queries/auth'
-import { Field } from '@/components/field'
-import { PageHead } from '@/components/page-head'
-import { SubmitButton } from '@/components/submit-button'
+import { Field } from '@/components/forms/field'
+import { PageHead } from '@/components/common/page-head'
+import { SubmitButton } from '@/components/forms/submit-button'
 import { Card } from '@/components/ui/card'
 
 const EMAIL_PATTERN = /^\S+@\S+\.\S+$/
