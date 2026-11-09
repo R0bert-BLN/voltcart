@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-# The one gate: lint, static analysis, type checks and tests, all inside the containers.
-# Exit 0 means the change is acceptable. Usage: ./bin/verify
+
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
