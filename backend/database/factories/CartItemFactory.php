@@ -7,9 +7,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<CartItem>
- */
+/** @extends Factory<CartItem> */
 class CartItemFactory extends Factory
 {
     public function definition(): array

@@ -3,49 +3,36 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Data\Admin\StoreProductData;
-use App\Data\Catalogue\ProductData;
+use App\Data\Common\ProductData;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Common\ProductFilterRequest;
 use App\Models\Product;
 use App\Services\Admin\ProductService;
-use App\Services\CatalogueService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class ProductController extends Controller
 {
-    public function __construct(
-        private readonly ProductService $products,
-        private readonly CatalogueService $catalogue,
-    ) {}
+    public function __construct(private readonly ProductService $products) {}
 
-    public function index(Request $request): JsonResponse
+    public function index(ProductFilterRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'search' => ['nullable', 'string', 'max:120'],
-            'category' => ['nullable', 'string', 'exists:categories,id'],
-            'in_stock' => ['nullable', 'boolean'],
-            'page' => ['nullable', 'integer', 'min:1'],
-        ]);
-
-        return response()->json($this->products->paginate($validated));
+        return response()->json($this->products->paginate($request->filters(), $request->page()));
     }
 
     public function store(StoreProductData $data): JsonResponse
     {
-        $product = $this->products->create($data);
-
-        return response()->json($this->catalogue->product($product), 201);
+        return response()->json($this->products->create($data), 201);
     }
 
     public function show(Product $product): ProductData
     {
-        return $this->catalogue->product($product);
+        return $this->products->show($product);
     }
 
     public function update(Product $product, StoreProductData $data): ProductData
     {
-        return $this->catalogue->product($this->products->update($product, $data));
+        return $this->products->update($product, $data);
     }
 
     public function destroy(Product $product): Response

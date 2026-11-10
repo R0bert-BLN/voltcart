@@ -9,9 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Seed the two mockup users.
-     */
     public function run(): void
     {
         User::create([

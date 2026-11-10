@@ -12,12 +12,10 @@ use App\Models\Supplier;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 class CatalogueSeeder extends Seeder
 {
-    /**
-     * Seed the catalogue from the mockup data (prices × 100 into cents, same ids).
-     */
     public function run(): void
     {
         foreach ([
@@ -71,9 +69,6 @@ class CatalogueSeeder extends Seeder
         $this->seedOrders();
     }
 
-    /**
-     * Maya's past orders. Items keep the name and price of the day.
-     */
     private function seedOrders(): void
     {
         $user = User::query()->where('role', UserRole::Client)->firstOrFail();
@@ -89,7 +84,7 @@ class CatalogueSeeder extends Seeder
 
         foreach ([
             [
-                'id' => 'VC-20431', 'date' => '2026-11-01', 'status' => 'Processing', 'estimated' => '2026-11-03',
+                'date' => '2026-11-01', 'status' => 'Processing', 'estimated' => '2026-11-03',
                 'deliveryId' => 'express', 'payment' => 'card',
                 'items' => [
                     ['id' => 'ph-corvo-6', 'name' => 'Corvo 6 Smartphone', 'price' => 799, 'qty' => 1],
@@ -97,7 +92,7 @@ class CatalogueSeeder extends Seeder
                 ],
             ],
             [
-                'id' => 'VC-20412', 'date' => '2026-10-28', 'status' => 'Shipped', 'estimated' => '2026-11-03',
+                'date' => '2026-10-28', 'status' => 'Shipped', 'estimated' => '2026-11-03',
                 'deliveryId' => 'standard', 'payment' => 'card',
                 'items' => [
                     ['id' => 'mn-lumen-27', 'name' => 'Lumen 27 QHD Monitor', 'price' => 329, 'qty' => 1],
@@ -105,7 +100,7 @@ class CatalogueSeeder extends Seeder
                 ],
             ],
             [
-                'id' => 'VC-20377', 'date' => '2026-09-14', 'status' => 'Delivered', 'estimated' => null,
+                'date' => '2026-09-14', 'status' => 'Delivered', 'estimated' => null,
                 'deliveryId' => 'standard', 'payment' => 'card',
                 'items' => [
                     ['id' => 'lp-fernbook-13', 'name' => 'Fernbook 13 Laptop', 'price' => 649, 'qty' => 1],
@@ -113,14 +108,14 @@ class CatalogueSeeder extends Seeder
                 ],
             ],
             [
-                'id' => 'VC-20291', 'date' => '2026-06-03', 'status' => 'Delivered', 'estimated' => null,
+                'date' => '2026-06-03', 'status' => 'Delivered', 'estimated' => null,
                 'deliveryId' => 'pickup', 'payment' => 'cod',
                 'items' => [
                     ['id' => 'au-halden-buds', 'name' => 'Halden Buds Earbuds', 'price' => 129, 'qty' => 2],
                 ],
             ],
             [
-                'id' => 'VC-20204', 'date' => '2026-03-19', 'status' => 'Cancelled', 'estimated' => null,
+                'date' => '2026-03-19', 'status' => 'Cancelled', 'estimated' => null,
                 'deliveryId' => 'standard', 'payment' => 'card',
                 'items' => [
                     ['id' => 'au-orvel-soundbar', 'name' => 'Orvel 300 Soundbar', 'price' => 349, 'qty' => 1],
@@ -128,7 +123,7 @@ class CatalogueSeeder extends Seeder
                 ],
             ],
             [
-                'id' => 'VC-20118', 'date' => '2025-12-08', 'status' => 'Delivered', 'estimated' => null,
+                'date' => '2025-12-08', 'status' => 'Delivered', 'estimated' => null,
                 'deliveryId' => 'standard', 'payment' => 'cod',
                 'items' => [
                     ['id' => 'sh-nimbus-hub', 'name' => 'Nimbus Home Hub', 'price' => 119, 'qty' => 1],
@@ -139,7 +134,7 @@ class CatalogueSeeder extends Seeder
             $delivery = DeliveryMethod::findOrFail($order['deliveryId']);
 
             $created = Order::create([
-                'id' => $order['id'],
+                'id' => (string) Str::ulid(),
                 'user_id' => $user->id,
                 'status' => OrderStatus::from(strtolower($order['status'])),
                 'delivery_method_id' => $delivery->id,
@@ -170,11 +165,7 @@ class CatalogueSeeder extends Seeder
         }
     }
 
-    /**
-     * The 24 mockup products.
-     *
-     * @return list<array<string, mixed>>
-     */
+    /** @return list<array<string, mixed>> */
     private function products(): array
     {
         return [

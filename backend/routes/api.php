@@ -1,18 +1,16 @@
 <?php
 
-use App\Data\PingData;
+use App\Data\Common\PingData;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\StockController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\CatalogueController;
-use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\CheckoutController;
+use App\Http\Controllers\Client\OrderController;
+use App\Http\Controllers\Client\WishlistController;
+use App\Http\Controllers\Common\AuthController;
+use App\Http\Controllers\Common\CatalogueController;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/ping', fn () => new PingData(ok: true));
 
 Route::get('/categories', [CatalogueController::class, 'categories']);
 Route::get('/products', [CatalogueController::class, 'products']);
@@ -28,7 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 
-Route::middleware(['auth:sanctum', 'client'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:client'])->group(function () {
     Route::get('/cart', [CartController::class, 'index']);
     Route::put('/cart/{product}', [CartController::class, 'update']);
     Route::delete('/cart/{product}', [CartController::class, 'destroy']);
@@ -43,7 +41,7 @@ Route::middleware(['auth:sanctum', 'client'])->group(function () {
     Route::delete('/wishlist/{product}', [WishlistController::class, 'destroy']);
 });
 
-Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/admin/ping', fn () => new PingData(ok: true));
 
     Route::get('/admin/products', [ProductController::class, 'index']);

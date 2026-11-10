@@ -8,9 +8,7 @@ use App\Models\Supplier;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
-/**
- * @extends Factory<Product>
- */
+/** @extends Factory<Product> */
 class ProductFactory extends Factory
 {
     public function definition(): array

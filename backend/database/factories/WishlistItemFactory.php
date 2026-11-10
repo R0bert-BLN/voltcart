@@ -7,9 +7,7 @@ use App\Models\User;
 use App\Models\WishlistItem;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<WishlistItem>
- */
+/** @extends Factory<WishlistItem> */
 class WishlistItemFactory extends Factory
 {
     public function definition(): array

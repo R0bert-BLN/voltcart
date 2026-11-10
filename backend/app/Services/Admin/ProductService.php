@@ -3,8 +3,10 @@
 namespace App\Services\Admin;
 
 use App\Data\Admin\StoreProductData;
-use App\Data\Catalogue\ProductSummaryData;
+use App\Data\Common\ProductData;
+use App\Data\Common\ProductSummaryData;
 use App\Models\Product;
+use App\Support\PaginationMeta;
 use Illuminate\Support\Str;
 
 class ProductService
@@ -12,59 +14,43 @@ class ProductService
     private const PER_PAGE = 50;
 
     /**
-     * @param  array{search?: string, category?: string, in_stock?: bool, page?: int}  $filters
+     * @param  array{category?: string, search?: string, in_stock?: bool}  $filters
      * @return array{data: list<ProductSummaryData>, meta: array{page: int, last_page: int, total: int}}
      */
-    public function paginate(array $filters): array
+    public function paginate(array $filters, int $page): array
     {
-        $query = Product::query();
-
-        if (isset($filters['category'])) {
-            $query->where('category_id', $filters['category']);
-        }
-
-        if (isset($filters['search'])) {
-            $escaped = str_replace('%', '\%', addcslashes($filters['search'], '\_'));
-            $query->where(fn ($q) => $q
-                ->where('name', 'ilike', "%{$escaped}%")
-                ->orWhere('description', 'ilike', "%{$escaped}%"));
-        }
-
-        if (filter_var($filters['in_stock'] ?? null, FILTER_VALIDATE_BOOL)) {
-            $query->where('stock', '>', 0);
-        }
-
-        $paginator = $query->orderBy('name')->orderBy('id')->paginate(
-            perPage: self::PER_PAGE,
-            page: $filters['page'] ?? 1,
-        );
+        $paginator = Product::query()
+            ->matching($filters)
+            ->orderBy('name')
+            ->orderBy('id')
+            ->paginate(perPage: self::PER_PAGE, page: $page);
 
         return [
             'data' => ProductSummaryData::collect($paginator->items()),
-            'meta' => [
-                'page' => $paginator->currentPage(),
-                'last_page' => max($paginator->lastPage(), 1),
-                'total' => $paginator->total(),
-            ],
+            'meta' => PaginationMeta::from($paginator),
         ];
     }
 
-    public function create(StoreProductData $data): Product
+    public function show(Product $product): ProductData
     {
-        /** @var Product $product */
-        $product = Product::create([
+        return ProductData::fromModel($product);
+    }
+
+    public function create(StoreProductData $data): ProductData
+    {
+        $product = Product::query()->create([
             ...$this->attributes($data),
             'id' => $this->uniqueSlug($data->name),
         ]);
 
-        return $product;
+        return ProductData::fromModel($product);
     }
 
-    public function update(Product $product, StoreProductData $data): Product
+    public function update(Product $product, StoreProductData $data): ProductData
     {
         $product->update($this->attributes($data));
 
-        return $product->refresh();
+        return ProductData::fromModel($product->refresh());
     }
 
     public function delete(Product $product): void
@@ -72,7 +58,7 @@ class ProductService
         $product->delete();
     }
 
-    /** @return array<string, mixed> model fillable attributes */
+    /** @return array<string, mixed> */
     private function attributes(StoreProductData $data): array
     {
         return [
@@ -87,7 +73,6 @@ class ProductService
         ];
     }
 
-    // The id is the slug of the name; a collision gets a numeric suffix.
     private function uniqueSlug(string $name): string
     {
         $slug = Str::slug($name);

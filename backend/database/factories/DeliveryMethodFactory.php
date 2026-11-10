@@ -5,9 +5,7 @@ namespace Database\Factories;
 use App\Models\DeliveryMethod;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory<DeliveryMethod>
- */
+/** @extends Factory<DeliveryMethod> */
 class DeliveryMethodFactory extends Factory
 {
     public function definition(): array
