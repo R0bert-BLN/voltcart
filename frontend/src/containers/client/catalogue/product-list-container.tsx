@@ -12,7 +12,7 @@ import {
   ProductListView,
   type FilterKey,
   type FilterOption,
-} from '@/components/views/client/product-list-view'
+} from '@/containers/client/catalogue/product-list-view'
 import { SORT_OPTIONS, type ProductsSearch } from '@/containers/client/catalogue/products-search'
 import { useShoppingActions } from '@/containers/client/catalogue/use-shopping-actions'
 import { splitIds } from '@/lib/search-params'

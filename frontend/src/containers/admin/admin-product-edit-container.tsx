@@ -8,8 +8,8 @@ import {
   useProduct,
   useSuppliers,
 } from '@/api/queries/common/catalogue'
-import { ProductEditorView } from '@/components/views/admin/product-editor-view'
-import { ProductGoneState } from '@/components/views/common/states'
+import { ProductEditorView } from '@/containers/admin/product-editor-view'
+import { ProductGoneState } from '@/containers/common/states'
 import { useProductForm } from '@/containers/admin/use-product-form'
 import { focusField } from '@/lib/focus'
 import { toFormValues } from '@/lib/admin/product-form'

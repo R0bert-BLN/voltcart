@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 import { ApiError } from '@/api/client'
 import { useRegister } from '@/api/queries/common/auth'
-import { RegisterView } from '@/components/views/common/register-view'
+import { RegisterView } from '@/containers/common/auth/register-view'
 import { isRegisterValid, readRegisterForm, type RegisterErrors } from '@/lib/auth-forms'
 import { firstName } from '@/lib/format'
 import { showToast } from '@/lib/toasts'

@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 import { ApiError } from '@/api/client'
 import { useLogin } from '@/api/queries/common/auth'
-import { LoginView } from '@/components/views/common/login-view'
+import { LoginView } from '@/containers/common/auth/login-view'
 import { isLoginValid, readLoginForm, type LoginErrors } from '@/lib/auth-forms'
 
 const route = getRouteApi('/login')

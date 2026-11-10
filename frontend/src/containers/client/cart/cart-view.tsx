@@ -8,7 +8,7 @@ import { Table } from '@/components/common/table'
 import { Totals } from '@/components/client/totals'
 import { Card } from '@/components/ui/card'
 import { Icon } from '@/components/ui/icon'
-import { EmptyCartState } from '@/components/views/common/states'
+import { EmptyCartState } from '@/containers/common/states'
 import { formatPrice, plural } from '@/lib/format'
 
 export interface CartRow {

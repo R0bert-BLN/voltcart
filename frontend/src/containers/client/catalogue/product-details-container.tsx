@@ -2,8 +2,8 @@ import { getRouteApi } from '@tanstack/react-router'
 import { useState } from 'react'
 
 import { useProductDetails } from '@/api/queries/common/catalogue'
-import { ProductDetailsView } from '@/components/views/client/product-details-view'
-import { ProductNotFoundState } from '@/components/views/common/states'
+import { ProductDetailsView } from '@/containers/client/catalogue/product-details-view'
+import { ProductNotFoundState } from '@/containers/common/states'
 import { useShoppingActions } from '@/containers/client/catalogue/use-shopping-actions'
 
 const route = getRouteApi('/products/$productId')

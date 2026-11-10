@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 import { deleteProduct, useAdminProducts } from '@/api/queries/admin/catalogue'
 import { useCategories } from '@/api/queries/common/catalogue'
-import { AdminProductsView } from '@/components/views/admin/admin-products-view'
+import { AdminProductsView } from '@/containers/admin/admin-products-view'
 import {
   STOCK_OPTIONS,
   type AdminProductsSearch,

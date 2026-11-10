@@ -7,9 +7,9 @@ import { useDeliveryMethods } from '@/api/queries/common/catalogue'
 import {
   CheckoutDetailsView,
   type PaymentMethod,
-} from '@/components/views/client/checkout-details-view'
-import { CheckoutFrame } from '@/components/views/client/checkout-frame'
-import { CartLoadingState, EmptyCartState } from '@/components/views/common/states'
+} from '@/containers/client/checkout/checkout-details-view'
+import { CheckoutFrame } from '@/containers/client/checkout/checkout-frame'
+import { CartLoadingState, EmptyCartState } from '@/containers/common/states'
 import { clearDetails, readDetails, saveDetails } from '@/lib/client/checkout'
 import { readCheckoutForm, type CheckoutErrors } from '@/lib/client/checkout-form'
 

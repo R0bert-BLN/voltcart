@@ -3,7 +3,7 @@ import {
   useDeliveryMethods,
   usePopularProducts,
 } from '@/api/queries/common/catalogue'
-import { StoreHomeView } from '@/components/views/client/store-home-view'
+import { StoreHomeView } from '@/containers/client/catalogue/store-home-view'
 import { useShoppingActions } from '@/containers/client/catalogue/use-shopping-actions'
 
 const POPULAR_LIMIT = 8

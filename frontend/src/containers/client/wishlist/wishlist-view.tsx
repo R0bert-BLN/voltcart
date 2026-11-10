@@ -5,7 +5,7 @@ import { PageHead } from '@/components/common/page-head'
 import { ProductCell } from '@/components/common/product-cell'
 import { StockBadge } from '@/components/common/stock-badge'
 import { Table } from '@/components/common/table'
-import { EmptyWishlistState } from '@/components/views/common/states'
+import { EmptyWishlistState } from '@/containers/common/states'
 import { formatPrice, plural } from '@/lib/format'
 
 export interface WishlistViewProps {

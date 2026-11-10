@@ -2,12 +2,12 @@ import { getRouteApi, useNavigate } from '@tanstack/react-router'
 
 import { useOrders } from '@/api/queries/client/orders'
 import type { ChipItem } from '@/components/client/chips'
-import { OrderHistoryView } from '@/components/views/client/order-history-view'
+import { OrderHistoryView } from '@/containers/client/orders/order-history-view'
 import {
   NoOrdersState,
   OrdersFailedState,
   OrdersLoadingState,
-} from '@/components/views/common/states'
+} from '@/containers/common/states'
 import { isOrderStatus, ORDER_STATUSES, statusLabel } from '@/lib/client/order-status'
 
 const route = getRouteApi('/orders/')
