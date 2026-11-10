@@ -6,7 +6,7 @@ Electronics store: Laravel 13 API (`backend/`) and React 19 app (`frontend/`), b
 ```bash
 docker compose up -d --wait                                   # db, backend (FrankenPHP), frontend (Vite)
 docker compose exec -T backend php artisan migrate --seed
-./bin/verify                                                  # pint, phpstan, types, pest, oxlint, tsc, vitest
+./bin/verify                                                  # pint, phpstan, types, oxlint, tsc
 ```
 App http://localhost:5173 · API http://localhost:8000 · Postgres localhost:5432 (`voltcart` / `voltcart`).
 

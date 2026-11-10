@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Actions;
+namespace App\Services;
 
 use App\Data\Checkout\PlaceOrderData;
 use App\Data\Order\OrderData;
+use App\Data\Order\OrderSummaryData;
 use App\Enums\OrderStatus;
 use App\Models\CartItem;
 use App\Models\DeliveryMethod;
@@ -14,9 +15,31 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
-class PlaceOrder
+class OrderService
 {
-    public function __invoke(User $user, PlaceOrderData $data): OrderData
+    /** @return list<OrderSummaryData> */
+    public function list(User $user, ?string $status): array
+    {
+        return OrderSummaryData::collect(
+            Order::query()
+                ->where('user_id', $user->id)
+                ->when($status !== null, fn ($query) => $query->where('status', $status))
+                ->with('items')
+                ->latest()
+                ->get()
+        )->values()->all();
+    }
+
+    public function findForUser(User $user, Order $order): ?OrderData
+    {
+        if ($order->user_id !== $user->id) {
+            return null;
+        }
+
+        return OrderData::fromModel($order);
+    }
+
+    public function place(User $user, PlaceOrderData $data): OrderData
     {
         return DB::transaction(function () use ($user, $data): OrderData {
             $cartItems = CartItem::query()
@@ -31,7 +54,7 @@ class PlaceOrder
                 ]);
             }
 
-            /** @var array<int, Product> $products */
+            /** @var array<string, Product> $products */
             $products = Product::query()
                 ->whereIn('id', $cartItems->pluck('product_id'))
                 ->lockForUpdate()

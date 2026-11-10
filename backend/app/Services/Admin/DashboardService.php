@@ -1,17 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin;
+namespace App\Services\Admin;
 
 use App\Data\Admin\DashboardData;
 use App\Data\Catalogue\ProductSummaryData;
-use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
-use Illuminate\Http\JsonResponse;
 
-class DashboardController extends Controller
+class DashboardService
 {
-    public function index(): JsonResponse
+    public function stats(): DashboardData
     {
         // Low stock is 1–5; zero is reported as out of stock (same as StockStatus).
         $lowStock = Product::query()
@@ -21,12 +19,12 @@ class DashboardController extends Controller
             ->orderBy('id')
             ->get();
 
-        return response()->json(new DashboardData(
+        return new DashboardData(
             products: Product::count(),
             categories: Category::count(),
             lowStock: $lowStock->count(),
             outOfStock: Product::query()->where('stock', 0)->count(),
             lowStockProducts: ProductSummaryData::collect($lowStock)->values()->all(),
-        ));
+        );
     }
 }

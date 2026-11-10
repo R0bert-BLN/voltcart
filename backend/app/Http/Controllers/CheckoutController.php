@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Actions\PlaceOrder;
 use App\Data\Checkout\PlaceOrderData;
 use App\Data\Order\OrderData;
-use App\Http\Controllers\Controller;
+use App\Services\OrderService;
 use Illuminate\Http\Request;
 
 class CheckoutController extends Controller
 {
+    public function __construct(private readonly OrderService $orders) {}
+
     public function store(Request $request, PlaceOrderData $data): OrderData
     {
-        return app(PlaceOrder::class)($request->user(), $data);
+        return $this->orders->place($request->user(), $data);
     }
 }

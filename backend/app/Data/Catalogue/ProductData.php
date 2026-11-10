@@ -3,6 +3,7 @@
 namespace App\Data\Catalogue;
 
 use App\Enums\StockStatus;
+use App\Models\Product;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -25,4 +26,24 @@ class ProductData extends Data
         public ?string $categoryId = null,
         public ?string $categoryName = null,
     ) {}
+
+    public static function fromModel(Product $product): self
+    {
+        $product->loadMissing(['category', 'supplier', 'deliveryMethods']);
+
+        return new self(
+            id: $product->id,
+            name: $product->name,
+            description: $product->description,
+            priceCents: $product->price_cents,
+            stock: $product->stock,
+            stockStatus: StockStatus::fromStock($product->stock),
+            image: $product->image,
+            specs: $product->specs ?? [],
+            supplier: $product->supplier !== null ? SupplierData::from($product->supplier) : null,
+            deliveryMethods: DeliveryMethodData::collect($product->deliveryMethods)->values()->all(),
+            categoryId: $product->category_id,
+            categoryName: $product->category->name,
+        );
+    }
 }

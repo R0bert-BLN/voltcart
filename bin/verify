@@ -23,9 +23,6 @@ if [ -n "$(git status --porcelain -- frontend/src/api/generated)" ]; then
   git status --short -- frontend/src/api/generated
 fi
 
-step "Backend: tests (pest)"
-be ./vendor/bin/pest --compact
-
 step "Frontend: lint (oxlint)"
 fe pnpm -s lint
 

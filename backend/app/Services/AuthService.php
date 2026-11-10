@@ -1,20 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Services;
 
 use App\Data\Auth\LoginData;
 use App\Data\Auth\RegisterData;
 use App\Data\Auth\TokenData;
 use App\Data\Auth\UserData;
 use App\Enums\UserRole;
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
-class AuthController extends Controller
+class AuthService
 {
     public function register(RegisterData $data): TokenData
     {
@@ -25,10 +22,7 @@ class AuthController extends Controller
             'role' => UserRole::Client,
         ]);
 
-        return new TokenData(
-            token: $user->createToken('auth')->plainTextToken,
-            user: UserData::from($user),
-        );
+        return $this->token($user);
     }
 
     public function login(LoginData $data): TokenData
@@ -41,21 +35,19 @@ class AuthController extends Controller
             ]);
         }
 
+        return $this->token($user);
+    }
+
+    public function logout(User $user): void
+    {
+        $user->currentAccessToken()->delete();
+    }
+
+    private function token(User $user): TokenData
+    {
         return new TokenData(
             token: $user->createToken('auth')->plainTextToken,
             user: UserData::from($user),
         );
-    }
-
-    public function logout(Request $request): Response
-    {
-        $request->user()->currentAccessToken()->delete();
-
-        return response()->noContent();
-    }
-
-    public function me(Request $request): UserData
-    {
-        return UserData::from($request->user());
     }
 }
