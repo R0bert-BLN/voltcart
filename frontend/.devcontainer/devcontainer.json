@@ -1,0 +1,27 @@
+{
+  "name": "voltcart frontend",
+  "dockerComposeFile": ["../../compose.yaml"],
+  "service": "frontend",
+  "runServices": ["frontend"],
+  "workspaceFolder": "/app",
+  "remoteUser": "node",
+  "overrideCommand": false,
+  "shutdownAction": "none",
+  "forwardPorts": [5173],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "oxc.oxc-vscode",
+        "bradlc.vscode-tailwindcss",
+        "editorconfig.editorconfig"
+      ],
+      "settings": {
+        "oxc.enable": true,
+        "tailwindCSS.classFunctions": ["cn", "cva"],
+        "files.exclude": {
+          "**/node_modules": true
+        }
+      }
+    }
+  }
+}

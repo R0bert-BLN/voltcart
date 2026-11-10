@@ -1,0 +1,33 @@
+{
+  "name": "voltcart backend",
+  "dockerComposeFile": ["../../compose.yaml"],
+  "service": "backend",
+  "runServices": ["backend"],
+  "workspaceFolder": "/app",
+  "remoteUser": "app",
+  "overrideCommand": false,
+  "shutdownAction": "none",
+  "forwardPorts": [8000],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bmewburn.vscode-intelephense-client",
+        "laravel.vscode-laravel",
+        "open-southeners.laravel-pint",
+        "sanderronde.phpstan-vscode",
+        "editorconfig.editorconfig"
+      ],
+      "settings": {
+        "php.validate.executablePath": "/usr/local/bin/php",
+        "intelephense.environment.phpVersion": "8.4.0",
+        "phpstan.binPath": "/app/vendor/bin/phpstan",
+        "phpstan.configFile": "/app/phpstan.neon",
+        "laravel-pint.enable": true,
+        "[php]": {
+          "editor.defaultFormatter": "open-southeners.laravel-pint",
+          "editor.formatOnSave": true
+        }
+      }
+    }
+  }
+}
