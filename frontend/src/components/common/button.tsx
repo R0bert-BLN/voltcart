@@ -1,34 +1,24 @@
-import { cn } from 'cn'
-
-import { Link, type LinkProps } from '@tanstack/react-router'
-
 import { Button as ButtonPrimitive } from '@/components/ui/button'
+import { AppLink } from '@/components/common/app-link'
+import { parseVariant, type ButtonVariant } from '@/components/common/button-variant'
 import { Icon, type IconName } from '@/components/ui/icon'
-import { parseVariant, type MockupVariant } from '@/components/common/variant'
+import { cn } from '@/lib/utils'
 
 export interface ButtonProps
-  extends Omit<
-    React.ComponentProps<typeof ButtonPrimitive>,
-    'children' | 'variant'
-  > {
-  /** Button label text, rendered as the children of the primitive button. */
+  extends Omit<React.ComponentProps<typeof ButtonPrimitive>, 'children' | 'variant'> {
   label: string
-  /** Variant flags of the mockup, combinable: secondary | ghost | danger | block. */
-  variant?: MockupVariant
-  /** Render as a link styled as a button when set (mockup "button with href"). */
+  variant?: ButtonVariant
   href?: string
-  /** Optional leading lucide icon. */
   icon?: IconName
+  compact?: boolean
 }
 
-/** Shared button (mockup MK.ui.button → .btn): the primitive Button with the
-    mockup sizes and states, one colour variant, an optional icon and an
-    optional href → link. */
 export function Button({
   label,
   variant = '',
   href,
   icon,
+  compact = false,
   className,
   type = 'button',
   ...props
@@ -39,10 +29,12 @@ export function Button({
     'disabled:bg-secondary disabled:text-muted-foreground disabled:border-border disabled:cursor-not-allowed',
     'aria-disabled:pointer-events-none aria-disabled:bg-secondary aria-disabled:text-muted-foreground aria-disabled:border-border',
     block && 'w-full',
+    compact && 'min-h-(--control-sm) px-(--sp-3) text-(--fs-sm)',
     className,
   )
+  const primitiveVariant = tone === 'default' ? undefined : tone
 
-  const inner = (
+  const content = (
     <>
       {icon ? <Icon name={icon} data-icon="inline-start" /> : null}
       {label}
@@ -51,32 +43,17 @@ export function Button({
 
   if (href) {
     return (
-      // The router link, so a button with an href navigates within the app
-      // in place of a full page load.
-      <ButtonPrimitive
-        asChild
-        className={classes}
-        variant={tone === 'default' ? undefined : tone}
-        {...props}
-      >
-        <Link
-          to={href as LinkProps['to']}
-          aria-disabled={props['aria-disabled'] ? 'true' : undefined}
-        >
-          {inner}
-        </Link>
+      <ButtonPrimitive asChild className={classes} variant={primitiveVariant} {...props}>
+        <AppLink href={href} aria-disabled={props['aria-disabled'] ? 'true' : undefined}>
+          {content}
+        </AppLink>
       </ButtonPrimitive>
     )
   }
 
   return (
-    <ButtonPrimitive
-      className={classes}
-      variant={tone === 'default' ? undefined : tone}
-      type={type}
-      {...props}
-    >
-      {inner}
+    <ButtonPrimitive className={classes} variant={primitiveVariant} type={type} {...props}>
+      {content}
     </ButtonPrimitive>
   )
 }

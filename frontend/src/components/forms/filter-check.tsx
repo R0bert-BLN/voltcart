@@ -1,21 +1,14 @@
 import { useId } from 'react'
 
-import { cn } from 'cn'
+import { cn } from '@/lib/utils'
 
 export interface FilterCheckProps
   extends Omit<React.ComponentProps<'input'>, 'type'> {
-  /** Text after the box, which may hold inline elements (links and the like). */
   label: React.ReactNode
-  /** Muted count shown after the label. */
   count?: number
-  /** Pairs with name in form markup; generated when omitted. */
   id?: string
 }
 
-/** Compact checkbox row from the mockup (MK.ui.filterCheck → .check.compact):
-    the box followed by the label, then a muted count; the whole row toggles.
-    Pass `checked` (with `onChange`) for a controlled box or `defaultChecked`
-    inside an uncontrolled form. */
 export function FilterCheck({
   name,
   value,

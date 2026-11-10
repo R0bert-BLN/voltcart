@@ -1,12 +1,9 @@
-import { cn } from 'cn'
+import { cn } from '@/lib/utils'
 
 export interface FilterGroupProps extends React.ComponentProps<'fieldset'> {
-  /** Legend text naming the items, e.g. "Delivery methods". */
   title: string
 }
 
-/** Fieldset of a filter or checkbox group from the mockup (MK.ui.filterGroup →
-    .filter-group): a borderless fieldset whose legend labels the check rows. */
 export function FilterGroup({ title, className, children, ...props }: FilterGroupProps) {
   return (
     <fieldset

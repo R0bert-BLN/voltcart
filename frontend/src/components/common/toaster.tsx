@@ -1,12 +1,13 @@
-import { cn } from 'cn'
+import type { Toast } from '@/lib/toasts'
+import { cn } from '@/lib/utils'
 
-import { dismissToast, useToasts } from '@/lib/toasts'
+export interface ToasterProps {
+  toasts: readonly Toast[]
+  onDismiss: (id: number) => void
+  className?: string
+}
 
-/** Feedback overlay (mockup .toasts/.toast): fixed at the bottom right, one
-    status live region so a screen reader announces a toast on arrival. */
-export function Toaster({ className }: { className?: string }) {
-  const toasts = useToasts()
-
+export function Toaster({ toasts, onDismiss, className }: ToasterProps) {
   return (
     <div
       data-slot="toasts"
@@ -28,10 +29,10 @@ export function Toaster({ className }: { className?: string }) {
             <button
               type="button"
               onClick={() => {
-                dismissToast(toast.id)
+                onDismiss(toast.id)
                 toast.action?.onClick()
               }}
-              className="shrink-0 min-h-11 font-(--fw-semibold) text-surface underline-offset-2 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
+              className="min-h-11 shrink-0 font-(--fw-semibold) text-surface underline-offset-2 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
             >
               {toast.action.label}
             </button>

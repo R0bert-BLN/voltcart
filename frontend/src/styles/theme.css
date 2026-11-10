@@ -7,13 +7,9 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Design tokens from the mockup (css/tokens.css), light theme only.
-   Components reference these via Tailwind utilities mapped below or via the
-   vars directly — never hard-coded colours, sizes, radii or shadows. */
 :root {
   color-scheme: light;
 
-  /* Colour */
   --bg: #F6F7F9;
   --surface: #FFFFFF;
   --surface-2: #EDF0F4;
@@ -36,7 +32,6 @@
   --overlay: rgb(20 32 46 / 50%);
   --focus: #0F5E9C;
 
-  /* Typography */
   --font: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --fs-xs: 12px;
   --fs-sm: 13px;
@@ -51,7 +46,6 @@
   --lh: 1.5;
   --lh-tight: 1.2;
 
-  /* Spacing */
   --sp-1: 4px;
   --sp-2: 8px;
   --sp-3: 12px;
@@ -62,18 +56,15 @@
   --sp-10: 40px;
   --sp-12: 48px;
 
-  /* Shape */
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 10px;
   --radius-pill: 999px;
 
-  /* Depth */
   --shadow-sm: 0 1px 2px rgb(20 32 46 / 6%);
   --shadow-md: 0 2px 4px rgb(20 32 46 / 6%), 0 8px 24px rgb(20 32 46 / 10%);
   --shadow-lg: 0 24px 64px rgb(20 32 46 / 22%);
 
-  /* Layout */
   --page-min: 1100px;
   --content-w: 1280px;
   --form-w: 380px;
@@ -95,16 +86,13 @@
   --form-max: 1120px;
   --narrow-w: 720px;
 
-  /* Elevation */
   --z-bars: 10;
   --z-menu: 20;
   --z-overlay: 50;
   --z-toast: 60;
 
-  /* Motion */
   --t-fast: 150ms ease;
 
-  /* shadcn primitives, mapped from the tokens above */
   --background: var(--bg);
   --foreground: var(--text);
   --card: var(--surface);
@@ -162,9 +150,6 @@
 
   --leading-tight: var(--lh-tight);
 
-  /* Mockup palette under Tailwind colour names; `--color-accent` stays a
-     hover tint for shadcn primitives — the wish-list orange token is
-     `--color-accent-strong`. */
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
@@ -216,8 +201,6 @@
   --color-foreground: var(--foreground);
   --color-background: var(--background);
 
-  /* The radius and shadow scales come straight from the raw --radius-* and
-     --shadow-* tokens defined in :root, which override Tailwind's defaults. */
   --radius-xl: calc(var(--radius-lg) + 4px);
   --radius-2xl: calc(var(--radius-lg) + 6px);
   --radius-3xl: calc(var(--radius-lg) + 8px);
@@ -233,6 +216,17 @@ body {
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  input:is([type="button"], [type="submit"], [type="reset"], [type="checkbox"], [type="radio"]):not(:disabled),
+  select:not(:disabled),
+  label:has(> input:is([type="checkbox"], [type="radio"]):not(:disabled)),
+  [role="combobox"]:not([aria-disabled="true"]),
+  [role="option"],
+  [role="checkbox"]:not([aria-disabled="true"]),
+  [role="menuitem"]:not([aria-disabled="true"]) {
+    cursor: pointer;
   }
   body {
     @apply bg-background text-foreground text-base font-normal;

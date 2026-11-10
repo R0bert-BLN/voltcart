@@ -1,26 +1,41 @@
 import { useId } from 'react'
 
-import { cn } from 'cn'
 import { Icon } from '@/components/ui/icon'
+import {
+  Select as SelectRoot,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { cn } from '@/lib/utils'
 
-export interface SelectProps extends Omit<React.ComponentProps<'select'>, 'id' | 'children'> {
-  /** Label text above the control. */
+export interface SelectOption {
+  value: string
   label: string
-  /** Choices; strings, or { value, label } when they differ. */
-  options: Array<string | { value: string; label: string }>
-  /** Static help line under the control. */
-  hint?: string
-  /** Validation message; marks the control invalid and links it via aria-describedby. */
-  error?: string
-  /** Text of the disabled first option; omit for no placeholder. */
-  placeholder?: string
-  /** Pairs with name in form markup; generated when omitted. */
-  id?: string
 }
 
-/** Labelled select from the mockup (MK.ui.select → .field): a label, the
-    native control with a focus ring, an optional placeholder option, help
-    line and inline error. */
+export interface SelectProps {
+  label: string
+  options: Array<string | SelectOption>
+  hint?: string
+  error?: string
+  placeholder?: string
+  id?: string
+  name?: string
+  value?: string
+  defaultValue?: string
+  required?: boolean
+  disabled?: boolean
+  className?: string
+  onValueChange?: (value: string) => void
+}
+
+const EMPTY_VALUE = '__empty__'
+
+const toOption = (option: string | SelectOption): SelectOption =>
+  typeof option === 'string' ? { value: option, label: option } : option
+
 export function Select({
   label,
   options,
@@ -29,6 +44,9 @@ export function Select({
   placeholder,
   className,
   id,
+  value,
+  defaultValue,
+  onValueChange,
   ...props
 }: SelectProps) {
   const autoId = useId()
@@ -36,37 +54,45 @@ export function Select({
   const hintId = `${selectId}-hint`
   const errorId = `${selectId}-error`
 
+  const items = options.map(toOption)
+  const hasEmptyOption = items.some((item) => item.value === '')
+  const encode = (raw: string | undefined) => (hasEmptyOption && raw === '' ? EMPTY_VALUE : raw)
+  const decode = (raw: string) => (raw === EMPTY_VALUE ? '' : raw)
+
   return (
     <div data-slot="select" className={cn('flex flex-col gap-1 text-sm', className)}>
       <label className="font-medium" htmlFor={selectId}>
         {label}
       </label>
-      <select
-        id={selectId}
-        aria-invalid={error ? true : undefined}
-        aria-describedby={cn(hint && hintId, error && errorId) || undefined}
-        className={cn(
-          'pointer-coarse:min-h-11 min-h-(--control) w-full rounded-[var(--radius-md)] border border-border-strong bg-surface px-3 text-base outline-none',
-          'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',
-          'aria-invalid:border-danger disabled:cursor-not-allowed disabled:bg-surface-2 disabled:text-text-muted',
-        )}
+      <SelectRoot
+        value={encode(value)}
+        defaultValue={encode(defaultValue)}
+        onValueChange={onValueChange ? (next) => onValueChange(decode(next)) : undefined}
         {...props}
       >
-        {placeholder ? (
-          <option value="" disabled>
-            {placeholder}
-          </option>
-        ) : null}
-        {options.map((option) => {
-          const { value, label: text } =
-            typeof option === 'string' ? { value: option, label: option } : option
-          return (
-            <option key={value} value={value}>
-              {text}
-            </option>
-          )
-        })}
-      </select>
+        <SelectTrigger
+          id={selectId}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={cn(hint && hintId, error && errorId) || undefined}
+          className={cn(
+            'w-full min-w-40 rounded-(--radius-md) border-border-strong bg-surface px-3 text-base data-[size=default]:h-(--control) pointer-coarse:data-[size=default]:h-11',
+            'hover:border-primary data-[state=open]:border-ring data-[state=open]:ring-3 data-[state=open]:ring-ring/50',
+          )}
+        >
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent position="popper" sideOffset={4} className="max-h-72 rounded-(--radius-md)">
+          {items.map((item) => (
+            <SelectItem
+              key={item.value}
+              value={item.value === '' ? EMPTY_VALUE : item.value}
+              className="py-2 pr-8 pl-2.5 pointer-coarse:py-3"
+            >
+              {item.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </SelectRoot>
       {hint ? (
         <span id={hintId} className="text-sm text-text-muted">
           {hint}

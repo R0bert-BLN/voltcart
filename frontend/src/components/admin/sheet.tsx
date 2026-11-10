@@ -1,23 +1,16 @@
 import { useId, type ReactNode } from 'react'
 
-import { cn } from 'cn'
+import { cn } from '@/lib/utils'
 import { Icon } from '@/components/ui/icon'
 
 export interface DialogProps {
-  /** Heading of the dialog; also its accessible name. */
   title: string
-  /** Dialog body. */
   children: ReactNode
-  /** Open state; when false the dialog stays out of the accessibility tree. */
   open?: boolean
-  /** Called with the requested next state on close (Escape or the close button). */
   onOpenChange?: (open: boolean) => void
   className?: string
 }
 
-/** Modal dialog from the mockup (MK.ui.sheet → .overlay + .sheet): a fixed
-    overlay centring a closable surface. Wire Escape and the close button via
-    onOpenChange; the overlay only renders when open. */
 export function Sheet({ title, children, open = false, onOpenChange, className }: DialogProps) {
   const titleId = useId()
 
@@ -39,7 +32,7 @@ export function Sheet({ title, children, open = false, onOpenChange, className }
     >
       <div
         className={cn(
-          'sheet flex max-h-[85dvh] w-full flex-col gap-4 overflow-y-auto rounded-[var(--radius-lg)] bg-surface p-6 shadow-lg',
+          'sheet flex max-h-[85dvh] w-full max-w-(--dialog-w) flex-col gap-4 overflow-y-auto rounded-[var(--radius-lg)] bg-surface p-6 shadow-lg',
         )}
       >
         <div className="flex items-center justify-between gap-4">

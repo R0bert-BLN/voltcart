@@ -1,13 +1,9 @@
-import { cn } from 'cn'
+import { cn } from '@/lib/utils'
 import { Icon } from '@/components/ui/icon'
 
 export interface PaginationProps {
-  /** The page the list is on; the previous button is disabled at 1 and the
-      next one at `total`. */
   current: number
-  /** Total number of pages. */
   total: number
-  /** Static page buttons fire here; pass nothing for display only. */
   onPageChange?: (page: number) => void
   className?: string
 }
@@ -15,8 +11,6 @@ export interface PaginationProps {
 const pageButton =
   'min-w-(--control) pointer-coarse:min-w-11 h-(--control) pointer-coarse:h-11 rounded-[var(--radius-md)] tabular-nums transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50'
 
-/** Static page buttons from the mockup (MK.ui.pagination → .pagination): a
-    nav with previous, numbered and next buttons; the current page is filled. */
 export function Pagination({ current, total, onPageChange, className }: PaginationProps) {
   const pick = (page: number) => () => onPageChange?.(page)
   const pickProps = (page: number) => ({

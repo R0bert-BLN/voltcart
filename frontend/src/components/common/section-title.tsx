@@ -1,16 +1,13 @@
 import type { ReactNode } from 'react'
 
-import { cn } from 'cn'
+import { cn } from '@/lib/utils'
 
 export interface SectionTitleProps {
   title: string
-  /** Trailing action (link, button) beside the title. */
   action?: ReactNode
   className?: string
 }
 
-/** Section heading from the mockup (MK.ui.sectionTitle → .section-title):
-    an h2 with an optional trailing action on the same baseline. */
 export function SectionTitle({ title, action, className }: SectionTitleProps) {
   return (
     <div

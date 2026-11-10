@@ -1,22 +1,15 @@
 import type { ReactNode } from 'react'
 
-import { cn } from 'cn'
+import { cn } from '@/lib/utils'
 import { Icon, type IconName } from '@/components/ui/icon'
 
 export interface EmptyProps extends React.ComponentProps<'div'> {
-  /** Lucide name of the icon in the round soft-primary holder. */
   icon: IconName
-  /** Main line, rendered as an h2. */
   title: string
-  /** Optional explanatory line under the title. */
   text?: string
-  /** Optional trailing action (link, button) under the text. */
   action?: ReactNode
 }
 
-/** Empty state from the mockup (MK.ui.empty → .empty): a dashed surface card
-    with the icon in a round soft-primary holder, a title, an optional line of
-    text and an optional trailing action. */
 export function Empty({ icon, title, text, action, children, className, ...props }: EmptyProps) {
   return (
     <div

@@ -168,7 +168,6 @@ export type RegisterData = {
 name: string,
 email: string,
 password: string,
-terms: boolean,
 };
 export type StockStatus = 'in_stock' | 'low_stock' | 'out_of_stock';
 export type StockUpdateData = {

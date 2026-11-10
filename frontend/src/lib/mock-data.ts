@@ -17,9 +17,7 @@ export type User = {
   email: string,
   phone?: string,
   address?: Address,
-  /** Product ids the account keeps on its wishlist. */
   wishlist?: string[],
-  /** Product ids with a quantity, as left behind on a previous visit. */
   cart?: CartEntry[],
 };
 
@@ -82,7 +80,6 @@ export type Product = {
   specs: ProductSpec[],
 };
 
-/** The demo's "today" (mockup MK.config.today), for records a change adds. */
 export const demoToday = '2026-11-02'
 
 export const users: User[] = [
@@ -148,4 +145,3 @@ export const products: Product[] = [
   {id: "ac-kite-mouse",name: "Kite Wireless Mouse",categoryId: "accessories",supplierId: "solara",price: 45,stock: 33,deliveryIds: ["standard","pickup"],updated: "2026-08-30",description: "A quiet ergonomic mouse that pairs with three devices and switches between them.",specs: [["Sensor","4,000 DPI"],["Connection","Bluetooth, USB receiver"],["Battery","Up to 70 days, USB-C"],["Weight","95 g"]]},
   {id: "ac-kite-keys",name: "Kite Low-Profile Keyboard",categoryId: "accessories",supplierId: "solara",price: 89,stock: 12,deliveryIds: ["standard","express"],updated: "2026-10-01",description: "A thin mechanical keyboard with quiet switches and a warm white backlight.",specs: [["Layout","ISO, 75%"],["Switches","Low-profile, quiet"],["Connection","Bluetooth, USB-C"],["Battery","Up to 200 hours"]]},
 ];
-

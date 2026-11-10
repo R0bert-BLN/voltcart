@@ -1,6 +1,5 @@
-import { Link, type LinkProps } from '@tanstack/react-router'
-
-import { cn } from 'cn'
+import { cn } from '@/lib/utils'
+import { AppLink } from '@/components/common/app-link'
 import { Icon, type IconName } from '@/components/ui/icon'
 
 export type StatTone = '' | 'warning' | 'danger'
@@ -12,21 +11,14 @@ const toneBox = {
 } as const satisfies Record<StatTone, string>
 
 export interface StatProps {
-  /** Small caption under the value. */
   label: string
-  /** The number or short text between the icon and the label. */
   value: string | number
-  /** Leading lucide icon in the tone box. */
   icon: IconName
-  /** Soft colour of the icon box; omit for the primary tone. */
   tone?: StatTone
-  /** Render as a link tile that navigates here instead of a plain tile. */
   href?: string
   className?: string
 }
 
-/** Number tile from the mockup (MK.ui.stat → .stat): a soft tone icon box, the
-    big tabular value and the muted label; with a href it is a link tile. */
 export function Stat({ label, value, icon, tone = '', href, className, ...props }: StatProps) {
   const classes = cn(
     'flex flex-col items-start gap-1 rounded-[var(--radius-lg)] border bg-surface p-5 text-left',
@@ -57,17 +49,9 @@ export function Stat({ label, value, icon, tone = '', href, className, ...props 
 
   if (href) {
     return (
-      // The router link, so the tile navigates within the app in place of a
-      // full page load.
-      <Link
-        to={href as LinkProps['to']}
-        data-slot="stat"
-        data-tone={tone}
-        className={classes}
-        {...props}
-      >
+      <AppLink href={href} data-slot="stat" data-tone={tone} className={classes} {...props}>
         {body}
-      </Link>
+      </AppLink>
     )
   }
 

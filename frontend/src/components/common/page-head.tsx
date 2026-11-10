@@ -1,16 +1,14 @@
 import type { ReactNode } from 'react'
 
-import { cn } from 'cn'
+import { cn } from '@/lib/utils'
 
 export interface PageHeadProps {
   title: string
   subtitle?: string
-  /** Actions for the trailing side (buttons, badges). */
   actions?: ReactNode
   className?: string
 }
 
-/** Page title from the mockup (.page-head): h1 with subtitle and trailing actions. */
 export function PageHead({ title, subtitle, actions, className }: PageHeadProps) {
   return (
     <div

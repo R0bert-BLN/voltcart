@@ -1,23 +1,17 @@
 import { useId } from 'react'
 
-import { cn } from 'cn'
+import { cn } from '@/lib/utils'
 import { Icon } from '@/components/ui/icon'
 
 export interface FieldProps extends Omit<React.ComponentProps<'input'>, 'id'> {
-  /** Label text above the control. */
   label: string
-  /** Static help line under the control. */
+  hideLabel?: boolean
   hint?: string
-  /** Validation message; marks the control invalid and links it via aria-describedby. */
   error?: string
-  /** Pairs with name in form markup; generated from the label when omitted. */
   id?: string
 }
 
-/** Labelled text input from the mockup (MK.ui.field → .field): a label, the
-    control with a focus ring and an aria-invalid danger border, plus optional
-    help line and inline error. */
-export function Field({ label, hint, error, className, id, ...props }: FieldProps) {
+export function Field({ label, hideLabel, hint, error, className, id, ...props }: FieldProps) {
   const autoId = useId()
   const inputId = id ?? `f-${autoId}`
   const hintId = `${inputId}-hint`
@@ -25,7 +19,7 @@ export function Field({ label, hint, error, className, id, ...props }: FieldProp
 
   return (
     <div data-slot="field" className={cn('flex flex-col gap-1 text-sm', className)}>
-      <label className="font-medium" htmlFor={inputId}>
+      <label className={cn('font-medium', hideLabel && 'sr-only')} htmlFor={inputId}>
         {label}
       </label>
       <input

@@ -1,6 +1,5 @@
 export class ApiError extends Error {
   status: number
-  /** 422 responses only: Laravel validation errors keyed by field. */
   fieldErrors?: Record<string, string[]>
 
   constructor(status: number, message: string, fieldErrors?: Record<string, string[]>) {
@@ -13,15 +12,16 @@ export class ApiError extends Error {
 
 const TOKEN_KEY = 'voltcart.auth.token'
 
-export const getToken = (): string | null => localStorage.getItem(TOKEN_KEY)
+const getToken = (): string | null => localStorage.getItem(TOKEN_KEY)
 
 export const setToken = (token: string): void => localStorage.setItem(TOKEN_KEY, token)
 
 export const clearToken = (): void => localStorage.removeItem(TOKEN_KEY)
 
+export const isSignedIn = (): boolean => getToken() !== null
+
 type RequestOptions = Omit<RequestInit, 'body'> & { body?: unknown }
 
-/** Fetch wrapper on /api: JSON in, JSON out, Bearer token from localStorage. */
 export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { body, headers, ...rest } = options
 
@@ -56,3 +56,12 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
 
   return (await response.json()) as T
 }
+
+export const isUnauthorized = (error: unknown): boolean =>
+  error instanceof ApiError && error.status === 401
+
+export const isForbidden = (error: unknown): boolean =>
+  error instanceof ApiError && error.status === 403
+
+export const isNotFound = (error: unknown): boolean =>
+  error instanceof ApiError && error.status === 404

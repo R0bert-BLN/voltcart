@@ -1,13 +1,11 @@
-import { cn } from 'cn'
+import { cn } from '@/lib/utils'
 
 import { Icon, type IconName } from '@/components/ui/icon'
 
 export type BadgeTone = '' | 'info' | 'success' | 'warning' | 'danger'
 
 export interface BadgeProps extends React.ComponentProps<'span'> {
-  /** Status tone; omit for the neutral badge. */
   tone?: BadgeTone
-  /** Optional leading lucide icon. */
   icon?: IconName
 }
 
@@ -19,7 +17,6 @@ const toneClasses = {
   danger: 'bg-(--danger-soft) text-(--danger)',
 } as const satisfies Record<BadgeTone, string>
 
-/** Status label from the mockup: pill, Extra Small type, tone from --*-soft/--* tokens. */
 export function Badge({ tone = '', icon, className, children, ...props }: BadgeProps) {
   return (
     <span

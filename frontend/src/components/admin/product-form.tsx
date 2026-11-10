@@ -1,74 +1,56 @@
 import { useId, useState } from 'react'
 
-import { cn } from 'cn'
 import { Button } from '@/components/common/button'
 import { Field } from '@/components/forms/field'
 import { FilterCheck } from '@/components/forms/filter-check'
 import { FilterGroup } from '@/components/forms/filter-group'
-import { Icon } from '@/components/ui/icon'
 import { Select } from '@/components/forms/select'
 import { Card } from '@/components/ui/card'
+import { Icon } from '@/components/ui/icon'
+import { formatDeliveryPrice } from '@/lib/format'
+import type { ProductFormErrors, ProductFormValues } from '@/lib/admin/product-form'
+import { cn } from '@/lib/utils'
 
-export interface ProductFormOption {
-  value: string
-  label: string
-}
-
-/** Delivery row shown as a compact check; the caller formats the label from
-    the delivery method data (mockup app.js does it with MK.money). */
-export interface ProductFormDelivery {
+interface NamedOption {
   id: string
-  label: React.ReactNode
+  name: string
 }
 
-/** Values to prefill; omit the ones that draw from suppliers, categories and
-    delivery methods, they come as separate props. */
-export interface ProductFormProduct {
-  name?: string
-  description?: string
-  priceCents?: number | null
-  stock?: number | null
-  supplierId?: string
-  categoryId?: string
-  deliveryIds?: string[]
-  specs?: Array<{ label?: string; value?: string }>
-}
-
-/** Inline validation messages for the required fields; the delivery group
-    error comes separately as `deliveryError` (the checkboxes share a name). */
-export interface ProductFormErrors {
-  name?: string
-  price?: string
-  stock?: string
-  supplierId?: string
-  categoryId?: string
+interface DeliveryChoice extends NamedOption {
+  priceCents: number
+  time: string
 }
 
 export interface ProductFormProps extends React.ComponentProps<'form'> {
-  product?: ProductFormProduct
-  suppliers: ProductFormOption[]
-  categories: ProductFormOption[]
-  deliveryMethods: ProductFormDelivery[]
-  /** Validation message shown at the foot of the delivery group. */
-  deliveryError?: string
-  /** Validation messages shown under the matching field. */
+  product?: Partial<ProductFormValues>
+  suppliers: NamedOption[]
+  categories: NamedOption[]
+  deliveryMethods: DeliveryChoice[]
+  deliveryError?: string | undefined
   errors?: ProductFormErrors
-  /** Buttons and links for the sticky aside beside the form. */
   actions?: React.ReactNode
-  className?: string
 }
 
-const control =
+interface SpecRow {
+  key: string
+  label?: string
+  value?: string
+}
+
+const CONTROL_CLASS =
   'min-h-(--control) w-full rounded-[var(--radius-md)] border border-border-strong bg-surface px-3 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50'
 
-const CardHead = ({ children }: { children: React.ReactNode }) => (
-  <h2 className="text-(--fs-xl) font-(--fw-semibold) leading-(--lh-tight)">{children}</h2>
-)
+const toOption = ({ id, name }: NamedOption) => ({ value: id, label: name })
 
-/** Add and edit product form from the mockup (MK.ui.productForm →
-    .form-layout): the details, specifications, price and stock and supply
-    cards in the main column, the actions in the sticky aside. Uncontrolled:
-    prefill comes from `product`, submit and its validation from the caller. */
+const deliveryLabel = (method: DeliveryChoice): string =>
+  `${method.name}: ${formatDeliveryPrice(method.priceCents).toLowerCase()}, ${method.time.toLowerCase()}`
+
+const newSpecRow = (spec: Partial<SpecRow> = {}): SpecRow => ({ ...spec, key: crypto.randomUUID() })
+
+function CardHead({ children }: { children: React.ReactNode }) {
+  return <h2 className="text-(--fs-xl) font-(--fw-semibold) leading-(--lh-tight)">{children}</h2>
+}
+
 export function ProductForm({
   product = {},
   suppliers,
@@ -84,16 +66,11 @@ export function ProductForm({
   const descriptionId = `desc-${autoId}`
   const specsId = `specs-${autoId}`
 
-  const [specs, setSpecs] = useState<Array<{ key: string; label?: string; value?: string }>>(() =>
-    (product.specs?.length ? product.specs : [{}]).map((spec) => ({
-      ...spec,
-      key: crypto.randomUUID(),
-    })),
+  const [specs, setSpecs] = useState<SpecRow[]>(() =>
+    (product.specs?.length ? product.specs : [{}]).map(newSpecRow),
   )
-  const addSpec = () => setSpecs((rows) => [...rows, { key: crypto.randomUUID() }])
+  const addSpec = () => setSpecs((rows) => [...rows, newSpecRow()])
   const removeSpec = (key: string) => setSpecs((rows) => rows.filter((row) => row.key !== key))
-
-  const cardClass = 'gap-4'
 
   return (
     <form
@@ -106,7 +83,7 @@ export function ProductForm({
       {...props}
     >
       <div className="flex min-w-0 flex-col gap-4">
-        <Card className={cardClass}>
+        <Card className="gap-4">
           <CardHead>Product details</CardHead>
           <Field
             label="Name"
@@ -126,12 +103,12 @@ export function ProductForm({
               rows={3}
               maxLength={600}
               defaultValue={product.description}
-              className={cn(control, 'resize-y py-2')}
+              className={cn(CONTROL_CLASS, 'resize-y py-2')}
             />
           </div>
         </Card>
 
-        <Card className={cardClass}>
+        <Card className="gap-4">
           <CardHead>Specifications</CardHead>
           <p className="text-sm text-text-muted">
             Rows with a missing label or value are not saved.
@@ -148,14 +125,14 @@ export function ProductForm({
                   placeholder="Label, e.g. Weight"
                   maxLength={40}
                   defaultValue={row.label}
-                  className={control}
+                  className={CONTROL_CLASS}
                 />
                 <input
                   aria-label="Specification value"
                   placeholder="Value, e.g. 1.2 kg"
                   maxLength={100}
                   defaultValue={row.value}
-                  className={control}
+                  className={CONTROL_CLASS}
                 />
                 <button
                   type="button"
@@ -173,7 +150,7 @@ export function ProductForm({
           </div>
         </Card>
 
-        <Card className={cardClass}>
+        <Card className="gap-4">
           <CardHead>Price and stock</CardHead>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Field
@@ -185,7 +162,7 @@ export function ProductForm({
               max="99999"
               step="0.01"
               inputMode="decimal"
-              defaultValue={product.priceCents == null ? undefined : product.priceCents / 100}
+              defaultValue={product.price}
               error={errors?.price}
             />
             <Field
@@ -196,13 +173,13 @@ export function ProductForm({
               min="0"
               max="99999"
               step="1"
-              defaultValue={product.stock == null ? undefined : product.stock}
+              defaultValue={product.stock}
               error={errors?.stock}
             />
           </div>
         </Card>
 
-        <Card className={cardClass}>
+        <Card className="gap-4">
           <CardHead>Supply and delivery</CardHead>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Select
@@ -211,7 +188,7 @@ export function ProductForm({
               required
               placeholder="Choose a supplier"
               defaultValue={product.supplierId ?? ''}
-              options={suppliers}
+              options={suppliers.map(toOption)}
               error={errors?.supplierId}
             />
             <Select
@@ -220,7 +197,7 @@ export function ProductForm({
               required
               placeholder="Choose a category"
               defaultValue={product.categoryId ?? ''}
-              options={categories}
+              options={categories.map(toOption)}
               error={errors?.categoryId}
             />
           </div>
@@ -230,7 +207,7 @@ export function ProductForm({
                 key={method.id}
                 name="deliveryIds"
                 value={method.id}
-                label={method.label}
+                label={deliveryLabel(method)}
                 defaultChecked={(product.deliveryIds ?? []).includes(method.id)}
               />
             ))}
@@ -244,7 +221,7 @@ export function ProductForm({
         </Card>
       </div>
 
-      <aside className="flex flex-col gap-4 lg:sticky lg:top-6">
+      <aside className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">{actions}</div>
       </aside>
     </form>

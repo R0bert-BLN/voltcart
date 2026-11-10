@@ -1,18 +1,13 @@
 import { useId, type ReactNode } from 'react'
 
-import { cn } from 'cn'
+import { cn } from '@/lib/utils'
 
 export interface CheckProps extends React.ComponentProps<'input'> {
-  /** Checkbox text, which may hold inline elements (links and the like). */
   label: ReactNode
-  /** Validation message under the box, linked to the input via aria-describedby. */
   error?: string
-  /** Pairs with name in form markup; generated when omitted. */
   id?: string
 }
 
-/** Checkbox from the mockup (MK.ui.check → .check): the box followed by the
-    label, at least a --control tall so the whole row is a comfortable target. */
 export function Check({ label, error, className, id, ...props }: CheckProps) {
   const autoId = useId()
   const inputId = id ?? `check-${autoId}`

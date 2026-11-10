@@ -1,16 +1,11 @@
-import { cn } from 'cn'
+import { cn } from '@/lib/utils'
 
 export interface RadioCardProps extends Omit<React.ComponentProps<'input'>, 'type'> {
-  /** Card title, the first line. */
   title: string
-  /** Muted second line under the title. */
   text?: string
-  /** Trailing slot (price, badge) after the text. */
   trail?: React.ReactNode
 }
 
-/** Radio as a card from the mockup (MK.ui.radioCard → .radio-card): the whole
-    card is the label; selecting it highlights the card with the primary tint. */
 export function RadioCard({ title, text, trail, className, ...props }: RadioCardProps) {
   return (
     <label
